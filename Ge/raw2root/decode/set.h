@@ -1,0 +1,4 @@
+
+//#define DEBUGMIDASDATA
+#define DEBUGDECODE
+
