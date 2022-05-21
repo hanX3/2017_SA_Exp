@@ -11,11 +11,16 @@
 
 //
 int GetLabelType(int label);
-int GetCloverID(int label);
-int GetSegementID(int label);
 bool GetADCorTDCFlag(int label);
-int GetCsIID(int label);
-int GetQDCID(int label);
+
+int GetCloverChannel(int label); //0-99
+int GetCsIChannel(int label);    //300-399
+int GetBGOChannel(int label);    //100-199
+int GetLaBr3Channel(int label);  //200-299
+
+int GetCloverID(int label);      //0-9
+int GetSegementID(int label);    //0-3
+int GetQDCID(int label);         //0-3
 
 //
 class Decode

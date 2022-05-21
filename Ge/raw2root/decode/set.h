@@ -1,4 +1,8 @@
 
 //#define DEBUGMIDASDATA
-#define DEBUGDECODE
+//#define DEBUGDECODE
+//#define DEBUGASSEMBLE
+
+#define CLOVERCHANNELS 40
+#define CSICHANNELS 64
 
