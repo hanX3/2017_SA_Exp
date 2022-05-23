@@ -1,0 +1,2 @@
+#define CLOVERCHANNELS 40
+
