@@ -1,4 +1,4 @@
-#include "Alignment.h"
+#include "Sort.h"
 
 #include <iostream>
 #include <fstream>
@@ -11,7 +11,7 @@ int main(int argc, char const *argv[])
 {
   if(argc != 3){
     std::cout << "need parameter" << std::endl;
-    std::cout << "like: decode 33 0" << std::endl;
+    std::cout << "like: sort 33 0" << std::endl;
 	std::cout << "means analysis decode file R33_0 " << std::endl;
 	return -1;
   }
@@ -21,14 +21,12 @@ int main(int argc, char const *argv[])
   TString file_in = TString::Format("../../../../data/Ge/root/R%04d_%04d_decode_2.root", run, index);
   std::cout << "alignment " << file_in << std::endl;
   
-  TString file_out = TString::Format("../../../../data/Ge/root/R%04d_%04d_sort_1.root", run, index);
+  TString file_out = TString::Format("../../../../data/Ge/root/R%04d_%04d_sort_2.root", run, index);
 
-  Alignment *al = new Alignment(file_in.Data(), file_out.Data());
-  al->Process();
-  //al->GetCloverTimeInterval();
-  //al->GetCsITimeInterval();
+  Sort *so = new Sort(file_in.Data(), file_out.Data());
+  so->Process();
 
-  delete al;
+  delete so;
 
   return 0;
 }
