@@ -8,6 +8,8 @@
 #include "TTree.h"
 #include "TCanvas.h"
 #include "TH1D.h"
+#include "TGraph.h"
+#include "TMultiGraph.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -15,7 +17,7 @@
 #include <iostream>
 
 struct TRAPZ_PAR{
-  Double_t delay_length;   // decay time of input trace (in points)
+  Double_t decay_length;   // decay time of input trace (in points)
   UInt_t   rise_length;    // rise time of trapezoid (in points)
   UInt_t   falt_top;       // flat top of trapezoid (in points)
   UInt_t   pre_trigger;    // number of points used for baseline recovery
@@ -42,6 +44,11 @@ struct TRAPZ_RESULT{
   Float_t time;
 };
 
+//
+Double_t RCCR2XX(Double_t *v, UInt_t i, UInt_t window, UInt_t risetime);
+Double_t RCCR2YY(Double_t *v, UInt_t i, UInt_t window);
+
+//
 class WaveAnalysis
 {
 public:
@@ -50,13 +57,15 @@ public:
   ~WaveAnalysis();
 
 public:
-  bool ProcessEntry();
+  bool ProcessEntry(Long64_t n);
   void DrawDraw(Long64_t n);
+  void DrawMultiRCCR2();
 
 private:
   bool GetWave(Long64_t n);
-  int CFD(Long64_t n);
-  int RCCR2(Long64_t n);
+  void CFD(Long64_t n);
+  void RCCR2(Long64_t n);
+  void Trapezoid(Long64_t n);
 
 private:
   TRAPZ_PAR trapz_par;
@@ -65,12 +74,15 @@ private:
 
   UShort_t ltra;
   UShort_t data[MAXLENGTH];
-  Short_t data_cfd;
+  Short_t data_rccr2[MAXLENGTH];
+  Short_t data_trapz[MAXLENGTH];
+  Double_t baseline;
 
 private:
   TFile *file_in;
   TTree *tr_in;
 
+  TCanvas *cav;
 };
 
 #endif

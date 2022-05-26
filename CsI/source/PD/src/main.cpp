@@ -26,7 +26,8 @@ int main(int argc, char *argv[])
   TString file_out = TString::Format("../../../../../data/CsI/source/data_R%04d_ana.root", run);
 
   WaveAnalysis *wa = new WaveAnalysis(file_in.Data(), file_out.Data());
-  wa->DrawDraw(0);
+  //wa->DrawDraw(113);
+  wa->DrawMultiRCCR2();
   
   ac.Run();
 
