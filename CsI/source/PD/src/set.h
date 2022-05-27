@@ -1,6 +1,8 @@
-#define DEBUGWAVEANALYSIS
+//#define DEBUGWAVEANALYSIS
+//#define DEBUGDRAWOPTION
 
 #define MAXLENGTH 32768
+#define POLARITY 1
 
 // CFD Parameters
 #define CFDPARPRITRIGGER    500
@@ -13,5 +15,14 @@
 #define TRAPPARRISELENGTH   500
 #define TRAPPARFLATTOP      100
 #define TRAPPARPRITRIGGER   500
-#define TRAPPARPEAKDELAY    500
-#define TRAPPARPEAKMEAN     1
+#define TRAPPARPEAKDELAY    0
+#define TRAPPARPEAKMEAN     0
+
+//
+#define PILEUPMAX 2
+
+// PID
+#define Q1START  1000
+#define Q1STOP   1200
+#define Q2START  1200
+#define Q2STOP   3000

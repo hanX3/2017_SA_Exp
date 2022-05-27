@@ -10,28 +10,36 @@
 
 int main(int argc, char *argv[])
 {
-  if(argc != 2){
+  if(argc != 4){
     std::cout << "need parameter" << std::endl;
-    std::cout << "like: ana 33" << std::endl;
-	std::cout << "means analysi file R33_0 " << std::endl;
+    std::cout << "like: ana 39 0 1000" << std::endl;
+	std::cout << "means analysi file 39 entry 0 to 1000 " << std::endl;
 	return -1;
   }
 
+#ifdef DEBUGDRAWOPTION
   TApplication ac("app", &argc, argv);
+#endif
 
   int run = atoi(argv[1]);
   TString file_in = TString::Format("../../../../../data/CsI/source/data_R%04d.root", run);
   std::cout << "analysis " << file_in << std::endl;
   
-  TString file_out = TString::Format("../../../../../data/CsI/source/data_R%04d_ana.root", run);
+  int entry_start = atoi(argv[2]);
+  int entry_stop = atoi(argv[3]);
+  TString file_out = TString::Format("../../../../../data/CsI/source/data_R0039/data_R%04d_%09d_%09d_ana.root", run, entry_start, entry_stop);
 
-  WaveAnalysis *wa = new WaveAnalysis(file_in.Data(), file_out.Data());
-  //wa->DrawDraw(113);
-  wa->DrawMultiRCCR2();
+  WaveAnalysis *wa = new WaveAnalysis(file_in.Data(), file_out.Data(), entry_start, entry_stop);
   
+#ifdef DEBUGDRAWOPTION
+  wa->DrawEntry(113);
+  //wa->DrawMultiRCCR2();
   ac.Run();
+#else
+  wa->Process();
+  delete wa;
+#endif
 
-  //delete wa;
 
   return 0;
 }

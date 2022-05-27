@@ -9,6 +9,7 @@
 #include "TCanvas.h"
 #include "TH1D.h"
 #include "TGraph.h"
+#include "TBenchmark.h"
 #include "TMultiGraph.h"
 
 #include <string.h>
@@ -40,32 +41,56 @@ struct CFD_PAR{
 };
 
 struct TRAPZ_RESULT{
-  Float_t energy;
-  Float_t time;
+  Double_t energy[PILEUPMAX];    // mean value of trapezoidal flat-top points
+  Double_t time_tag[PILEUPMAX];  // trigger time tag for each hit
+  UShort_t trigger_num;         // number of triggers
+};
+
+struct QDC_PAR{
+  UInt_t q1_start;         // in points
+  UInt_t q1_stop;          // in points
+  UInt_t q2_start;         // in points
+  UInt_t q2_stop;          // in points
+};
+
+struct QDC_RESULT{
+  Double_t qdc_short;      // 
+  Double_t qdc_long;       // 
 };
 
 //
 Double_t RCCR2XX(Double_t *v, UInt_t i, UInt_t window, UInt_t risetime);
 Double_t RCCR2YY(Double_t *v, UInt_t i, UInt_t window);
+Double_t Integral(Double_t *v, UInt_t i, UInt_t j);
 
 //
 class WaveAnalysis
 {
 public:
   WaveAnalysis() = default;
-  WaveAnalysis(const std::string &filename_in, const std::string &filename_out);
+  WaveAnalysis(const std::string &filename_in, const std::string &filename_out, int a, int b);
   ~WaveAnalysis();
 
 public:
+  void Process();
   bool ProcessEntry(Long64_t n);
-  void DrawDraw(Long64_t n);
+#ifdef DEBUGDRAWOPTION
+  void DrawEntry(Long64_t n);
   void DrawMultiRCCR2();
+#endif
 
 private:
   bool GetWave(Long64_t n);
   void CFD(Long64_t n);
   void RCCR2(Long64_t n);
   void Trapezoid(Long64_t n);
+
+  //PID
+  void CaliQDC(Long64_t n);
+
+private:
+  Int_t entry_start;
+  Int_t entry_stop;
 
 private:
   TRAPZ_PAR trapz_par;
@@ -74,13 +99,24 @@ private:
 
   UShort_t ltra;
   UShort_t data[MAXLENGTH];
-  Short_t data_rccr2[MAXLENGTH];
-  Short_t data_trapz[MAXLENGTH];
+  Double_t data_bl[MAXLENGTH];
+  Double_t data_rccr2[MAXLENGTH];
+  Double_t data_trapz[MAXLENGTH];
   Double_t baseline;
 
+  //PID
+  QDC_PAR qdc_par;
+  QDC_RESULT qdc_result;
+
 private:
+  TBenchmark *benchmark;
+
   TFile *file_in;
   TTree *tr_in;
+  Long64_t total_entry;
+
+  TFile *file_out;
+  TTree *tr_out;
 
   TCanvas *cav;
 };
