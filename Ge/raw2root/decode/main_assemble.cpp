@@ -13,8 +13,8 @@ int main(int argc, char const *argv[])
   if(argc != 3){
     std::cout << "need parameter" << std::endl;
     std::cout << "like: assemble 33 0" << std::endl;
-	std::cout << "means assemble file R33_0 " << std::endl;
-	return -1;
+    std::cout << "means assemble file R33_0 " << std::endl;
+    return -1;
   }
 
   int run = atoi(argv[1]);

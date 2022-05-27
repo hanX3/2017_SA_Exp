@@ -46,16 +46,16 @@ bool Decode::ProcessEntry()
   }
 #ifdef DEBUGDECODE
   if(GetLabelType(label)==2 && nevt<1000){
-  	md->PrintInfo();
+    md->PrintInfo();
   }
 #endif
 
   label = md->GetLabel();
   if((GetLabelType(label)==1 && !GetADCorTDCFlag(label)) || (GetLabelType(label)==2)){
-  	adc_qdc = md->GetADC_TDC_QDC();
-  	timestamp = md->GetTimestamp();
+    adc_qdc = md->GetADC_TDC_QDC();
+    timestamp = md->GetTimestamp();
 
-  	tr->Fill();
+    tr->Fill();
   }
 
   return true;
@@ -68,12 +68,12 @@ void Decode::Process()
 
   while(true){
     label = 0;
-	adc_qdc = 0;
-	timestamp = 0;
+    adc_qdc = 0;
+    timestamp = 0;
 
-	if(!ProcessEntry()){
-	  break;
-	}
+    if(!ProcessEntry()){
+      break;
+    }
   }
 
   file_out->cd();
@@ -255,11 +255,11 @@ int GetLabelType(int label)
     case 0x1b6 :
     case 0x1b7 : return 3;//bgo
 
-	case 0x146 :
-	case 0x156 : return 4;//LaBr3
+    case 0x146 :
+    case 0x156 : return 4;//LaBr3
 
-	case 0x14f :
-	case 0x15f : return 5;//unkonwn
+    case 0x14f :
+    case 0x15f : return 5;//unkonwn
 
     default:
       return -1;
@@ -401,11 +401,11 @@ int GetLaBr3Channel(int label)
 {
   switch(label){
     case 0x146 : return 200;
-	  break;
+      break;
 
-	default :
-	  return -1;
-	  break;
+    default :
+      return -1;
+      break;
   }
 }
 

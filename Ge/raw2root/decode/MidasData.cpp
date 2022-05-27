@@ -82,7 +82,7 @@ bool MidasData::GetNextTwoWords()
       if((fread(&buff, sizeof(unsigned int), 2, fp)) != 2){
 #ifdef DEBUGMIDASDATA
         std::cout << "block header, then error" << "\n";
-		std::cout << "current position " << ftell(fp) << "\n";
+	std::cout << "current position " << ftell(fp) << "\n";
 #endif
         return false;
       }
@@ -99,7 +99,7 @@ bool MidasData::GetNextTwoWords()
       if((fread(&buff, sizeof(unsigned int), 2, fp)) != 2){
 #ifdef DEBUGMIDASDATA
         std::cout << "block tail, then error" << "\n";
-		std::cout << "current position " << ftell(fp) << "\n";
+	std::cout << "current position " << ftell(fp) << "\n";
 #endif
         return false;
       }

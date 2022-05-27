@@ -13,8 +13,8 @@ int main(int argc, char const *argv[])
   if(argc != 3){
     std::cout << "need parameter" << std::endl;
     std::cout << "like: decode 33 0" << std::endl;
-	std::cout << "means analysis decode file R33_0 " << std::endl;
-	return -1;
+    std::cout << "means analysis decode file R33_0 " << std::endl;
+    return -1;
   }
 
   int run = atoi(argv[1]);

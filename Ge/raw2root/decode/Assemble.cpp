@@ -25,7 +25,7 @@ Assemble::Assemble(const std::string &filename_in, const std::string &filename_o
   tr->Branch("ch", &ch, "ch/s");
   tr->Branch("adc", &adc, "adc/s");
   tr->Branch("qdc", qdc, "qdc[4]/s");
-  tr->Branch("timestamp", &timestamp, "timestamp/i");
+  tr->Branch("timestamp", &timestamp, "timestamp/L");
 
   label = 0;
   ch = 0;
@@ -34,24 +34,26 @@ Assemble::Assemble(const std::string &filename_in, const std::string &filename_o
     qdc[i] = 0;
   }
   timestamp = 0;
+  timestamp_previous = 0;
+  k_time = 0;
 
   //
   for(int i=0;i<CLOVERCHANNELS;i++){
     tr_Clover[i] = new TTree(TString::Format("tr_Clover_ch%02d",i).Data(), "clover channel info");
-  	tr_Clover[i]->Branch("ch", &ch, "ch/s");
-  	tr_Clover[i]->Branch("adc", &adc, "adc/s");
-  	tr_Clover[i]->Branch("timestamp", &timestamp, "timestamp/i");
+    tr_Clover[i]->Branch("ch", &ch, "ch/s");
+    tr_Clover[i]->Branch("adc", &adc, "adc/s");
+    tr_Clover[i]->Branch("timestamp", &timestamp, "timestamp/L");
 
-	nevt_Clover[i] = 0;
+    nevt_Clover[i] = 0;
   }
 
   for(int i=0;i<CSICHANNELS;i++){
     tr_CsI[i] = new TTree(TString::Format("tr_CsI_ch%02d",i).Data(), "csi channel info");
-  	tr_CsI[i]->Branch("ch", &ch, "ch/s");
-  	tr_CsI[i]->Branch("qdc", qdc, "qdc[4]/s");
-  	tr_CsI[i]->Branch("timestamp", &timestamp, "timestamp/i");
+    tr_CsI[i]->Branch("ch", &ch, "ch/s");
+    tr_CsI[i]->Branch("qdc", qdc, "qdc[4]/s");
+    tr_CsI[i]->Branch("timestamp", &timestamp, "timestamp/L");
 
-	nevt_CsI[i] = 0;
+    nevt_CsI[i] = 0;
   }
 }
 
@@ -75,8 +77,14 @@ bool Assemble::ProcessEntryClover()
   ch = GetCloverChannel(label_in);
   adc = adc_qdc_in;
   for(int i=0;i<4;i++)  qdc[i] = 0;
-  timestamp = timestamp_in;
+  if(timestamp_in < timestamp_previous){
+    k_time++;
+    std::cout << "k_time " << k_time << " nevt " << nevt << std::endl;
+  }
+  timestamp = (Long64_t)((Long64_t)(timestamp_in)+(Long64_t)(268435455)*(Long64_t)(k_time));
 
+  timestamp_previous = (Long64_t)timestamp_in;
+  
   return true;
 }
 
@@ -95,7 +103,7 @@ bool Assemble::ProcessEntryCsI()
       nevt += i;
       nevt_abandon++;
 #ifdef DEBUGASSEMBLE
-	  std::cout << "1. nevt " << nevt << std::endl;
+      std::cout << "1. nevt " << nevt << std::endl;
 #endif
       return false;
     }
@@ -107,7 +115,7 @@ bool Assemble::ProcessEntryCsI()
       nevt += 1;
       nevt_abandon++;
 #ifdef DEBUGASSEMBLE
-	  std::cout << "2. nevt " << nevt << std::endl;
+      std::cout << "2. nevt " << nevt << std::endl;
 #endif
       return false;
     }
@@ -118,7 +126,7 @@ bool Assemble::ProcessEntryCsI()
       nevt += 1;
       nevt_abandon++;
 #ifdef DEBUGASSEMBLE
-	  std::cout << "3. nevt " << nevt << std::endl;
+      std::cout << "3. nevt " << nevt << std::endl;
 #endif
       return false;
     }
@@ -127,7 +135,13 @@ bool Assemble::ProcessEntryCsI()
   label = la[0];
   ch = GetCsIChannel(label);
   adc = qdc[0];
-  timestamp = timestamp_in;
+  if(timestamp_in < timestamp_previous){
+    k_time++;
+    std::cout << "k_time " << k_time << " nevt " << nevt << std::endl;
+  }
+  timestamp = (Long64_t)((Long64_t)(timestamp_in)+(Long64_t)(268435455)*(Long64_t)(k_time));
+
+  timestamp_previous = (Long64_t)timestamp_in;
 
   return true;
 }
@@ -140,27 +154,26 @@ void Assemble::Process()
   while(true){
     if(nevt >= total_nevt) break;
 
-    if(nevt%100000==0){
+    if(nevt%1000000==0){
       std::cout << "nevt " << nevt << std::endl;
     }
 
     tr_in->GetEntry(nevt);
     if(GetLabelType(label_in)==1){
       if(ProcessEntryClover()){
-  		tr->Fill();
-  		tr_Clover[ch]->Fill();
-		nevt_Clover[ch]++;
-
-		nevt ++;
+        tr->Fill();
+        tr_Clover[ch]->Fill();
+        nevt_Clover[ch]++;
+        nevt ++;
       }
     }
     if(GetLabelType(label_in)==2){
       if(ProcessEntryCsI()){
         tr->Fill();
-		tr_CsI[ch-300]->Fill();
-		nevt_CsI[ch-300]++;
+	tr_CsI[ch-300]->Fill();
+	nevt_CsI[ch-300]++;
 
-		nevt += 4;
+	nevt += 4;
       }
     }
   }
@@ -168,15 +181,15 @@ void Assemble::Process()
   file_out->cd();
   tr->Write();
   for(int i=0;i<CLOVERCHANNELS;i++){
-  	if(nevt_Clover[i]>0){
-	  tr_Clover[i]->Write();
-	}
+    if(nevt_Clover[i]>0){
+      tr_Clover[i]->Write();
+    }
   }
 
   for(int i=0;i<CSICHANNELS;i++){
-  	if(nevt_CsI[i]>0){
-	  tr_CsI[i]->Write();
-	}
+    if(nevt_CsI[i]>0){
+      tr_CsI[i]->Write();
+    }
   }
   file_out->Close();
 

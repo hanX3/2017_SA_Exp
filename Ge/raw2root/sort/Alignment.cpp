@@ -11,20 +11,20 @@ Alignment::Alignment(const std::string &filename_in, const std::string &filename
   file_in = TFile::Open(filename_in.c_str());
   for(int i=0;i<CLOVERCHANNELS;i++){
     tr_Clover[i] = (TTree*)file_in->Get(TString::Format("tr_Clover_ch%02d",i).Data());
-	if(!tr_Clover[i]){
-	  continue;
-	}
-	tr_Clover[i]->SetBranchAddress("ch", &ch_Clover);
-	tr_Clover[i]->SetBranchAddress("timestamp", &timestamp_Clover);
+    if(!tr_Clover[i]){
+      continue;
+    }
+    tr_Clover[i]->SetBranchAddress("ch", &ch_Clover);
+    tr_Clover[i]->SetBranchAddress("timestamp", &timestamp_Clover);
   }
 
   for(int i=0;i<CSICHANNELS;i++){
     tr_CsI[i] = (TTree*)file_in->Get(TString::Format("tr_CsI_ch%02d",i).Data());
-	if(!tr_CsI[i]){
-	  continue;
-	}
-	tr_CsI[i]->SetBranchAddress("ch", &ch_CsI);
-	tr_CsI[i]->SetBranchAddress("timestamp", &timestamp_CsI);
+    if(!tr_CsI[i]){
+      continue;
+    }
+    tr_CsI[i]->SetBranchAddress("ch", &ch_CsI);
+    tr_CsI[i]->SetBranchAddress("timestamp", &timestamp_CsI);
   }
 
   ch_Clover = 0;
@@ -35,15 +35,15 @@ Alignment::Alignment(const std::string &filename_in, const std::string &filename
   file_out = TFile::Open(filename_out.c_str(), "recreate");
   for(int i=0;i<CLOVERCHANNELS;i++){
     if(tr_Clover[i]){
-	  id_clover = i;
-	  break;
-	}else continue;
+      id_clover = i;
+       break;
+    }else continue;
   }
   for(int i=0;i<CSICHANNELS;i++){
     if(tr_CsI[i]){
-	  id_csi = i;
-	  break;
-	}else continue;
+      id_csi = i;
+      break;
+    }else continue;
   }
 
 #ifdef DEBUGALIGNMENT
@@ -117,42 +117,42 @@ void Alignment::Process()
   GetCloverTimestampVector(tr_Clover[id_clover], v1);
   for(int i=id_clover+1;i<CLOVERCHANNELS;i++){
     v2.clear();
-	j = 0;
-	k = 0;
+    j = 0;
+    k = 0;
 
-	if(!tr_Clover[i]) continue;
+    if(!tr_Clover[i]) continue;
     GetCloverTimestampVector(tr_Clover[i], v2);
-	while(true){
-	  if(j==(Long64_t)v1.size() || k==(Long64_t)v2.size())  break;
+    while(true){
+      if(j==(Long64_t)v1.size() || k==(Long64_t)v2.size())  break;
       ts1 = v1[j];
-	  while(true){
-	    if(k==(Long64_t)v2.size())  break;
-	    ts2 = v2[k];
+      while(true){
+        if(k==(Long64_t)v2.size())  break;
+        ts2 = v2[k];
 #ifdef DEBUGALIGNMENT
-		std::cout << j << " ts1 " << ts1 << std::endl;
-		std::cout << k << " ts2 " << ts2 << std::endl;
-		std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
+ 	std::cout << j << " ts1 " << ts1 << std::endl;
+	std::cout << k << " ts2 " << ts2 << std::endl;
+	std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
 #endif
-		if(abs(ts1-ts2)<ALIGNMENTWINDOW){
+	if(abs(ts1-ts2)<ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-	      std::cout << "1" << std::endl;
+          std::cout << "1" << std::endl;
 #endif
-		  h1[i-id_clover-1]->Fill(ts1-ts2);
-		  k++;
-		}else if((ts1-ts2)>ALIGNMENTWINDOW){
+	  h1[i-id_clover-1]->Fill(ts1-ts2);
+	  k++;
+	}else if((ts1-ts2)>ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-	      std::cout << "2" << std::endl;
+          std::cout << "2" << std::endl;
 #endif
-		  k++;
-		}else{
+	  k++;
+	}else{
 #ifdef DEBUGALIGNMENT
-		  std::cout << "3" << std::endl;
+	  std::cout << "3" << std::endl;
 #endif
-		  j++;
-		  break;
-		}
-	  }
+	  j++;
+	  break;
 	}
+      }
+    }
   }
 
   //csi vs. csi
@@ -160,42 +160,42 @@ void Alignment::Process()
   GetCsITimestampVector(tr_CsI[id_csi], v1);
   for(int i=id_csi+1;i<CSICHANNELS;i++){
     v2.clear();
-	j = 0;
-	k = 0;
+    j = 0;
+    k = 0;
 
-	if(!tr_CsI[i]) continue;
+    if(!tr_CsI[i]) continue;
     GetCsITimestampVector(tr_CsI[i], v2);
-	while(true){
-	  if(j==(Long64_t)v1.size() || k==(Long64_t)v2.size())  break;
+    while(true){
+      if(j==(Long64_t)v1.size() || k==(Long64_t)v2.size())  break;
       ts1 = v1[j];
-	  while(true){
-	    if(k==(Long64_t)v2.size())  break;
-	    ts2 = v2[k];
+      while(true){
+        if(k==(Long64_t)v2.size())  break;
+        ts2 = v2[k];
 #ifdef DEBUGALIGNMENT
-		std::cout << j << " ts1 " << ts1 << std::endl;
-		std::cout << k << " ts2 " << ts2 << std::endl;
-		std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
+	std::cout << j << " ts1 " << ts1 << std::endl;
+	std::cout << k << " ts2 " << ts2 << std::endl;
+	std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
 #endif
-		if(abs(ts1-ts2)<ALIGNMENTWINDOW){
+	if(abs(ts1-ts2)<ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-	      std::cout << "1" << std::endl;
+          std::cout << "1" << std::endl;
 #endif
-		  h2[i-id_csi-1]->Fill(ts1-ts2);
-		  k++;
-		}else if((ts1-ts2)>ALIGNMENTWINDOW){
+	  h2[i-id_csi-1]->Fill(ts1-ts2);
+	  k++;
+	}else if((ts1-ts2)>ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-	      std::cout << "2" << std::endl;
+          std::cout << "2" << std::endl;
 #endif
-		  k++;
-		}else{
+	  k++;
+	}else{
 #ifdef DEBUGALIGNMENT
-		  std::cout << "3" << std::endl;
+	  std::cout << "3" << std::endl;
 #endif
-		  j++;
-		  break;
-		}
-	  }
+	  j++;
+	  break;
 	}
+      }
+    }
   }
   
   //clover vs. csi
@@ -203,55 +203,55 @@ void Alignment::Process()
   GetCloverTimestampVector(tr_Clover[id_clover], v1);
   for(int i=id_csi;i<CSICHANNELS;i++){
     v2.clear();
-	j = 0;
-	k = 0;
+    j = 0;
+    k = 0;
 
-	if(!tr_CsI[i]) continue;
+    if(!tr_CsI[i]) continue;
     GetCsITimestampVector(tr_CsI[i], v2);
-	while(true){
-	  if(j==(Long64_t)v1.size() || k==(Long64_t)v2.size())  break;
-      ts1 = v1[j];
-	  while(true){
-	    if(k==(Long64_t)v2.size())  break;
-	    ts2 = v2[k];
+    while(true){
+    if(j==(Long64_t)v1.size() || k==(Long64_t)v2.size())  break;
+    ts1 = v1[j];
+      while(true){
+        if(k==(Long64_t)v2.size())  break;
+        ts2 = v2[k];
 #ifdef DEBUGALIGNMENT
-		std::cout << j << " ts1 " << ts1 << std::endl;
-		std::cout << k << " ts2 " << ts2 << std::endl;
-		std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
-#endif
-		if(abs(ts1-ts2)<ALIGNMENTWINDOW){
+        std::cout << j << " ts1 " << ts1 << std::endl;
+        std::cout << k << " ts2 " << ts2 << std::endl;
+        std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
+#endif 
+        if(abs(ts1-ts2)<ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-	      std::cout << "1" << std::endl;
+          std::cout << "1" << std::endl;
 #endif
-		  hh[i-id_csi]->Fill(ts1-ts2);
-		  k++;
-		}else if((ts1-ts2)>ALIGNMENTWINDOW){
+	  hh[i-id_csi]->Fill(ts1-ts2);
+	  k++;
+        }else if((ts1-ts2)>ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-	      std::cout << "2" << std::endl;
+          std::cout << "2" << std::endl;
 #endif
-		  k++;
-		}else{
+          k++;
+        }else{
 #ifdef DEBUGALIGNMENT
-		  std::cout << "3" << std::endl;
+          std::cout << "3" << std::endl;
 #endif
-		  j++;
-		  break;
-		}
-	  }
-	}
+          j++;
+          break;
+        }
+      }
+    }
   }
 
   file_out->cd();
   for(int i=id_clover+1;i<CLOVERCHANNELS;i++){
-	if(!tr_Clover[i]) continue;
+    if(!tr_Clover[i]) continue;
     h1[i-id_clover-1]->Write();
   }
   for(int i=id_csi+1;i<CSICHANNELS;i++){
-	if(!tr_CsI[i]) continue;
+    if(!tr_CsI[i]) continue;
     h2[i-id_csi-1]->Write();
   }
   for(int i=id_csi;i<CSICHANNELS;i++){
-	if(!tr_CsI[i]) continue;
+    if(!tr_CsI[i]) continue;
     hh[i-id_csi]->Write();
   }
 }
@@ -270,28 +270,28 @@ void Alignment::GetCloverTimeInterval()
     v.clear();
     GetCloverTimestampVector(tr_Clover[i], v);
 
-  	hi_clover[i-id_clover] = new TH1D(TString::Format("hi_clover_ch%02d",i).Data(), TString::Format("hi_clover_ch%02d",i).Data(), 1000000, 0, 1000000000);
+    hi_clover[i-id_clover] = new TH1D(TString::Format("hi_clover_ch%02d",i).Data(), TString::Format("hi_clover_ch%02d",i).Data(), 1000000, 0, 1000000000);
 
     ti = 0;
     ti_max = 0;
-	k = 0;
-	ts = 0;
+    k = 0;
+    ts = 0;
     for(Long64_t j=1;j<(Long64_t)v.size();j++){
       ti = v[j]-v[j-1];
-	  hi_clover[i]->Fill(ti);
-	  if(ti > ti_max){
-	    ti_max = ti;
+      hi_clover[i]->Fill(ti);
+      if(ti > ti_max){
+        ti_max = ti;
         k = j;
-		ts = v[j];
-	  }
+ 	ts = v[j];
+      }
     }
-	std::cout << i << " " << k << " " << ti_max << " " << ts << std::endl;
+    std::cout << i << " " << k << " " << ti_max << " " << ts << std::endl;
   }
 
   file_out->cd();
   for(int i=id_clover;i<CLOVERCHANNELS;i++){
     if(!tr_Clover[i]) continue;
-	hi_clover[i-id_clover]->Write();
+      hi_clover[i-id_clover]->Write();
   }
 }
 
@@ -309,26 +309,26 @@ void Alignment::GetCsITimeInterval()
     v.clear();
     GetCsITimestampVector(tr_CsI[i], v);
 
-  	hi_csi[i-id_csi] = new TH1D(TString::Format("hi_csi_ch%02d",i).Data(), TString::Format("hi_csi_ch%02d",i).Data(), 1000000, 0, 1000000000);
+    hi_csi[i-id_csi] = new TH1D(TString::Format("hi_csi_ch%02d",i).Data(), TString::Format("hi_csi_ch%02d",i).Data(), 1000000, 0, 1000000000);
 
     ti = 0;
     ti_max = 0;
-	k = 0;
-	ts = 0;
+    k = 0;
+    ts = 0;
     for(Long64_t j=1;j<(Long64_t)v.size();j++){
       ti = v[j]-v[j-1];
-	  hi_csi[i-id_csi]->Fill(ti);
-	  if(ti > ti_max){
-	    ti_max = ti;
+      hi_csi[i-id_csi]->Fill(ti);
+      if(ti > ti_max){
+        ti_max = ti;
         k = j;
-		ts = v[j];
-	  }
+	ts = v[j];
+      }
     }
-	std::cout << i << " " << k << " " << ti_max << " " << ts << std::endl;
+    std::cout << i << " " << k << " " << ti_max << " " << ts << std::endl;
   }
 
   for(int i=id_csi;i<CSICHANNELS;i++){
     if(!tr_CsI[i]) continue;
-	hi_csi[i-id_csi]->Write();
+      hi_csi[i-id_csi]->Write();
   }
 }

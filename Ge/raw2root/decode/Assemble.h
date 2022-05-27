@@ -32,7 +32,10 @@ private:
   UShort_t ch;
   UShort_t adc;
   UShort_t qdc[4];
-  UInt_t timestamp;
+  Long64_t timestamp;
+
+  Long64_t timestamp_previous;
+  Int_t k_time;
 
   TBenchmark *benchmark;
   Long64_t nevt;
