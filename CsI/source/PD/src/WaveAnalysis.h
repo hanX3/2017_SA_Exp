@@ -8,6 +8,7 @@
 #include "TTree.h"
 #include "TCanvas.h"
 #include "TH1D.h"
+#include "TF1.h"
 #include "TGraph.h"
 #include "TBenchmark.h"
 #include "TMultiGraph.h"
@@ -58,10 +59,33 @@ struct QDC_RESULT{
   Double_t qdc_long;       // 
 };
 
+struct FIT_PAR{
+  UInt_t fit_start;        // in points
+  UInt_t fit_stop;         // in points
+  // par[0]: baseline
+  // par[1]: t0 (in points)
+  // par[2]: tau rc (in points)
+  // par[3]: tau fast (in points)
+  // par[4]: tau slow (in points)
+  // par[5]: am fast
+  // par[6]: am slow
+  Double_t par[7];
+  Double_t par_min[7];
+  Double_t par_max[7];
+};
+
+struct FIT_RESULT{
+  Double_t tau_fast;
+  Double_t tau_slow;
+  Double_t am_fast;
+  Double_t am_slow;
+};
+
 //
 Double_t RCCR2XX(Double_t *v, UInt_t i, UInt_t window, UInt_t risetime);
 Double_t RCCR2YY(Double_t *v, UInt_t i, UInt_t window);
 Double_t Integral(Double_t *v, UInt_t i, UInt_t j);
+Double_t Fittf(Double_t *i, Double_t *p);
 
 //
 class WaveAnalysis
@@ -87,6 +111,7 @@ private:
 
   //PID
   void CaliQDC(Long64_t n);
+  void FitWave(Long64_t n);
 
 private:
   Int_t entry_start;
@@ -107,6 +132,8 @@ private:
   //PID
   QDC_PAR qdc_par;
   QDC_RESULT qdc_result;
+  FIT_PAR fit_par;
+  FIT_RESULT fit_result;
 
 private:
   TBenchmark *benchmark;
@@ -118,7 +145,10 @@ private:
   TFile *file_out;
   TTree *tr_out;
 
-  TCanvas *cav;
+#ifdef DEBUGDRAWOPTION
+  TCanvas *cav1;
+  TCanvas *cav2;
+#endif
 };
 
 #endif

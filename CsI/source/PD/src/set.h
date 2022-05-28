@@ -1,5 +1,5 @@
 //#define DEBUGWAVEANALYSIS
-//#define DEBUGDRAWOPTION
+#define DEBUGDRAWOPTION
 
 #define MAXLENGTH 32768
 #define POLARITY 1
@@ -26,3 +26,29 @@
 #define Q1STOP   1200
 #define Q2START  1200
 #define Q2STOP   3000
+
+#define FITSTART 0
+#define FITSTOP  3000
+
+#define BASELINE            0.
+#define BASELINEMIN         -10.
+#define BASELINEMAX         10.
+#define T0                  900.
+#define T0MIN               600.
+#define T0MAX               1200.
+#define TAURC               2200.
+#define TAURCMIN            1000.
+#define TAURCMAX            4000.
+#define TAUFAST             60.
+#define TAUFASTMIN          20.
+#define TAUFASTMAX          200.
+#define TAUSLOW             1000.
+#define TAUSLOWMIN          200.
+#define TAUSLOWMAX          2000.
+#define AMFAST              30.
+#define AMFASTMIN           1.
+#define AMFASTMAX           300.
+#define AMSLOW              30.
+#define AMSLOWMIN           1.
+#define AMSLOWMAX           300.
+

@@ -38,21 +38,51 @@ WaveAnalysis::WaveAnalysis(const std::string &filename_in, const std::string &fi
 
   //PID
   memset(&qdc_par, 0, sizeof(QDC_PAR));
-
   qdc_par.q1_start = Q1START;
   qdc_par.q1_stop = Q1STOP;
   qdc_par.q2_start = Q2START;
   qdc_par.q2_stop = Q2STOP;
 
+  memset(&fit_par, 0, sizeof(FIT_PAR));
+  fit_par.fit_start = FITSTART;
+  fit_par.fit_stop = FITSTOP;
+  fit_par.par[0] = BASELINE; 
+  fit_par.par[1] = T0;
+  fit_par.par[2] = TAURC; 
+  fit_par.par[3] = TAUFAST;
+  fit_par.par[4] = TAUSLOW;
+  fit_par.par[5] = AMFAST;
+  fit_par.par[6] = AMSLOW;
+
+  fit_par.par_min[0] = BASELINEMIN; 
+  fit_par.par_min[1] = T0MIN;
+  fit_par.par_min[2] = TAURCMIN; 
+  fit_par.par_min[3] = TAUFASTMIN;
+  fit_par.par_min[4] = TAUSLOWMIN;
+  fit_par.par_min[5] = AMFASTMIN;
+  fit_par.par_min[6] = AMSLOWMIN;
+
+  fit_par.par_max[0] = BASELINEMAX; 
+  fit_par.par_max[1] = T0MAX;
+  fit_par.par_max[2] = TAURCMAX; 
+  fit_par.par_max[3] = TAUFASTMAX;
+  fit_par.par_max[4] = TAUSLOWMAX;
+  fit_par.par_max[5] = AMFASTMAX;
+  fit_par.par_max[6] = AMSLOWMAX;
+
   file_out = new TFile(filename_out.c_str(), "recreate");
   tr_out = new TTree("tr", "wave analysis info");
   TString leaf1 = TString::Format("energy[%d]/D:time_tag[%d]/D:trigger_num/s", PILEUPMAX, PILEUPMAX);
   TString leaf2 = TString::Format("qdc_short/D:qdc_long/D");
+  TString leaf3 = TString::Format("tau_fast/D:tau_slow/D:am_fast/D:am_slow/D");
   tr_out->Branch("trapz_result", &trapz_result, leaf1.Data());
   tr_out->Branch("qdc_result", &qdc_result, leaf2.Data());
+  tr_out->Branch("fit_result", &fit_result, leaf3.Data());
+  
 
 #ifdef DEBUGDRAWOPTION
-  cav = new TCanvas("cav", "", 0, 0, 480, 360);
+  cav1 = new TCanvas("cav1", "", 0, 0, 480, 360);
+  cav2 = new TCanvas("cav2", "", 0, 0, 480, 360);
 #endif
 }
 
@@ -197,8 +227,7 @@ bool WaveAnalysis::ProcessEntry(Long64_t n)
 
   //PID
   CaliQDC(n);   
-
-
+  FitWave(n);
 
   return true;
 }
@@ -286,6 +315,39 @@ void WaveAnalysis::CaliQDC(Long64_t n)
   qdc_result.qdc_long = Integral(data_bl, qdc_par.q2_start, qdc_par.q2_stop);
 }
 
+//
+void WaveAnalysis::FitWave(Long64_t n)
+{
+  TH1D *h = new TH1D(TString::Format("h%09lld",n).Data(), "", ltra, 0, ltra);
+  for(UInt_t i=0;i<ltra;i++){
+    h->SetBinContent(i+1, data_bl[i]);
+  }
+
+  TF1 *tf = new TF1(TString::Format("tf%09lld",n).Data(), Fittf, fit_par.fit_start, fit_par.fit_stop, 7);
+  for(int i=0;i<7;i++){
+    tf->SetParameter(i, fit_par.par[i]);
+  }
+  tf->SetParLimits(3, fit_par.par_min[3], fit_par.par_max[3]);
+  tf->SetParLimits(4, fit_par.par_min[4], fit_par.par_max[4]);
+
+  //tf->FixParameter(0, fit_par.par[0]);
+  tf->FixParameter(2, fit_par.par[2]);
+
+#ifdef DEBUGDRAWOPTION  
+  cav2->cd();
+  h->Draw();
+  h->Fit(tf, "WR");
+#else
+  h->Fit(tf, "QWN0RS");
+  fit_result.tau_fast = tf->GetParameter(3);
+  fit_result.tau_slow = tf->GetParameter(4);
+  fit_result.am_fast = tf->GetParameter(5);
+  fit_result.am_slow = tf->GetParameter(6);
+
+  delete h;
+  delete tf;
+#endif
+}
 
 #ifdef DEBUGDRAWOPTION
 //
@@ -293,37 +355,38 @@ void WaveAnalysis::DrawEntry(Long64_t n)
 {
   GetWave(n);
   RCCR2(n);
+  Trapezoid(n);
 
   TGraph *g1 = new TGraph(ltra);
   for(int i=0;i<ltra;i++){
-    g1->SetPoint(i, (Double_t)i, (Double_t)data[i]-baseline);
+    g1->SetPoint(i, (Double_t)i, (Double_t)data_bl[i]);
   }
 
-  cav->cd();
+  cav1->cd();
   g1->Draw();
 
   //
   TGraph *g2 = new TGraph(ltra);
   for(int i=0;i<ltra;i++){
     g2->SetPoint(i, (Double_t)i, (Double_t)data_rccr2[i]);
-    //std::cout << "data_rccr2 " << data_rccr2[i] << std::endl;
   }
 
-  cav->cd();
+  cav1->cd();
   g2->SetLineColor(2);
   g2->Draw("same");
 
   //
-  Trapezoid(n);
   TGraph *g3 = new TGraph(ltra);
   for(int i=0;i<ltra;i++){
     g3->SetPoint(i, (Double_t)i, (Double_t)data_trapz[i]);
-    //std::cout << "data_trapz " << data_trapz[i] << std::endl;
   }
 
-  cav->cd();
+  cav1->cd();
   g3->SetLineColor(4);
   g3->Draw("same");
+
+  //
+  FitWave(n);
 }
 #endif
 
@@ -342,7 +405,7 @@ void WaveAnalysis::DrawMultiRCCR2()
     mg->Add(g[i]);
   }
 
-  cav->cd();
+  cav1->cd();
   mg->Draw("ap");
 }
 #endif
@@ -380,3 +443,26 @@ Double_t Integral(Double_t *v, UInt_t i, UInt_t j)
 
   return s;
 }
+
+//
+// p[0]: baseline
+// p[1]: t0 (in points)
+// p[2]: tau rc (in points)
+// p[3]: tau fast (in points)
+// p[4]: tau slow (in points)
+// p[5]: am fast
+// p[6]: am slow
+Double_t Fittf(Double_t *i, Double_t *p)
+{
+  Double_t s = p[0];
+  Double_t x = i[0] - p[1];
+  Double_t e = exp(-x/p[2]);
+
+  if(x<0) return s;
+  else{
+    s += p[5]*(1-exp(-x/p[3]))*e; 
+    s += p[6]*(1-exp(-x/p[4]))*e;
+	return s;
+  }
+}
+
