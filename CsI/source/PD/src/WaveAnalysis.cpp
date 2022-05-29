@@ -328,10 +328,11 @@ void WaveAnalysis::FitWave(Long64_t n)
     tf->SetParameter(i, fit_par.par[i]);
   }
   tf->SetParLimits(3, fit_par.par_min[3], fit_par.par_max[3]);
-  tf->SetParLimits(4, fit_par.par_min[4], fit_par.par_max[4]);
+  //tf->SetParLimits(4, fit_par.par_min[4], fit_par.par_max[4]);
 
   //tf->FixParameter(0, fit_par.par[0]);
   tf->FixParameter(2, fit_par.par[2]);
+  tf->FixParameter(4, fit_par.par[4]);
 
 #ifdef DEBUGDRAWOPTION  
   cav2->cd();

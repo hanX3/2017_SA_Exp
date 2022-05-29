@@ -1,5 +1,5 @@
 //#define DEBUGWAVEANALYSIS
-#define DEBUGDRAWOPTION
+//#define DEBUGDRAWOPTION
 
 #define MAXLENGTH 32768
 #define POLARITY 1
@@ -36,15 +36,15 @@
 #define T0                  900.
 #define T0MIN               600.
 #define T0MAX               1200.
-#define TAURC               2200.
+#define TAURC               1400.
 #define TAURCMIN            1000.
 #define TAURCMAX            4000.
 #define TAUFAST             60.
 #define TAUFASTMIN          20.
 #define TAUFASTMAX          200.
-#define TAUSLOW             1000.
+#define TAUSLOW             900.
 #define TAUSLOWMIN          200.
-#define TAUSLOWMAX          2000.
+#define TAUSLOWMAX          4000.
 #define AMFAST              30.
 #define AMFASTMIN           1.
 #define AMFASTMAX           300.
