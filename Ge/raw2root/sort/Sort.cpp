@@ -206,6 +206,9 @@ void Sort::AddBack(Int_t c)
   tr_Clover_cali_addback->Branch("timestamp_cali_addback", &timestamp_cali_addback, "timestamp_cali_addback/L");
 
   for(Long64_t i=0;i<(Long64_t)(vec_cd_addback.size());i++){
+	if(vec_cd_addback[i].energy<ENERGYMIN || vec_cd_addback[i].energy>ENERGYMAX){
+	  continue;
+	}
     id_cali_addback = vec_cd_addback[i].id;
     adc_cali_addback = vec_cd_addback[i].energy;
     timestamp_cali_addback = vec_cd_addback[i].timestamp;

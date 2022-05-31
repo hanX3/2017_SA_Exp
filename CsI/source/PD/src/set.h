@@ -36,7 +36,7 @@
 #define T0                  900.
 #define T0MIN               600.
 #define T0MAX               1200.
-#define TAURC               1400.
+#define TAURC               1200.
 #define TAURCMIN            1000.
 #define TAURCMAX            4000.
 #define TAUFAST             60.

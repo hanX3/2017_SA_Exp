@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
-#rm ../../../../data/CsI/inbeam/mod2-DDAS-2017-12-11-04-28-27/*ana*.root
-rm ../../../../data/CsI/inbeam/mod2-DDAS-2017-12-08-14-44-59/*ana*.root
+rm ../../../../../data/CsI/inbeam/mod2-DDAS-2017-12-08-14-44-59/300lsb/*ana*.root
 
 ./ana_batch 0 100 &
 ./ana_batch 100 200 &
