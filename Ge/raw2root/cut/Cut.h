@@ -25,19 +25,29 @@ public:
 
 private:
   void Clear();
-  bool IsInside(Int_t id, Double_t x, Double_t y);
+  bool IsInsideProton(Int_t id, Double_t x, Double_t y);
+  bool IsInsideAlpha(Int_t id, Double_t x, Double_t y);
   void ProcessEntry(Long64_t n);
 
 private:
-  Double_t ax[CSINUMBER];
-  Double_t ay[CSINUMBER];
-  Double_t bx[CSINUMBER];
-  Double_t by[CSINUMBER];
-  Double_t cx[CSINUMBER];
-  Double_t cy[CSINUMBER];
-  Double_t dx[CSINUMBER];
-  Double_t dy[CSINUMBER];
+  Double_t ax_proton[CSINUMBER];
+  Double_t ay_proton[CSINUMBER];
+  Double_t bx_proton[CSINUMBER];
+  Double_t by_proton[CSINUMBER];
+  Double_t cx_proton[CSINUMBER];
+  Double_t cy_proton[CSINUMBER];
+  Double_t dx_proton[CSINUMBER];
+  Double_t dy_proton[CSINUMBER];
 
+  Double_t ax_alpha[CSINUMBER];
+  Double_t ay_alpha[CSINUMBER];
+  Double_t bx_alpha[CSINUMBER];
+  Double_t by_alpha[CSINUMBER];
+  Double_t cx_alpha[CSINUMBER];
+  Double_t cy_alpha[CSINUMBER];
+  Double_t dx_alpha[CSINUMBER];
+  Double_t dy_alpha[CSINUMBER];
+  
 private:
   TBenchmark *benchmark;
   TFile *file_in;
@@ -63,8 +73,12 @@ private:
   Int_t clover_cut_id[CLOVERNUMBER];
   Double_t clover_cut_energy[CLOVERNUMBER];
 
+  Int_t proton_num;
+  Int_t alpha_num;
+
   Int_t csi_cut_hit;
   Int_t csi_cut_id[CSINUMBER];
+  Int_t csi_cut_type[CSINUMBER];//1-->proton, 2-->alpha
   Double_t csi_cut_qdc1[CSINUMBER];
   Double_t csi_cut_qdc2[CSINUMBER];
   Double_t csi_cut_qdc3[CSINUMBER];
