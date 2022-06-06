@@ -1,4 +1,4 @@
-//#define DEBUGMERGE
+//#define DEBUGBUILD
 
 #define CLOVERNUMBER 10
 #define CSINUMBER    64

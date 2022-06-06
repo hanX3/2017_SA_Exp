@@ -33,18 +33,21 @@ Decode::~Decode()
 bool Decode::ProcessEntry()
 {
   if(!md->ProcessBuff()){
+#ifdef DEBUGDECODE
     std::cout << "end of raw file" << std::endl;
+#endif
     return false;
   }
 
   nevt++;
+#ifdef DEBUGDECODE
   if(nevt<10){
     md->PrintInfo();
   }
+
   if(nevt%1000000==0){
     std::cout << std::dec << "nevt " << nevt << std::endl;
   }
-#ifdef DEBUGDECODE
   if(GetLabelType(label)==2 && nevt<1000){
     md->PrintInfo();
   }

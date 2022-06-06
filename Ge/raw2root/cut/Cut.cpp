@@ -59,7 +59,8 @@ Cut::Cut(const std::string &filename_in, const std::string &filename_out)
 
   for(int i=0;i<CSINUMBER;i++){
     std::ifstream fi;
-    fi.open(TString::Format("./dat/csi%02d_alpha.txt",i).Data());
+    //fi.open(TString::Format("./dat/csi%02d_alpha.txt",i).Data());
+    fi.open(TString::Format("./dat/csi%02d_alpha_stringent.txt",i).Data());
     if(!fi){
       continue;
     }
@@ -72,6 +73,7 @@ Cut::Cut(const std::string &filename_in, const std::string &filename_out)
     fi.close();
   }
 
+#ifdef DEBUGCUT
   for(int i=0;i<CSINUMBER;i++){
     std::cout << i << " " << ax_proton[i] << " " << ay_proton[i] << std::endl;
     std::cout << i << " " << bx_proton[i] << " " << by_proton[i] << std::endl;
@@ -84,6 +86,7 @@ Cut::Cut(const std::string &filename_in, const std::string &filename_out)
     std::cout << i << " " << cx_alpha[i] << " " << cy_alpha[i] << std::endl;
     std::cout << i << " " << dx_alpha[i] << " " << dy_alpha[i] << std::endl;
   }
+#endif
 
   nevt = 0;
 
@@ -234,11 +237,14 @@ void Cut::ProcessEntry(Long64_t n)
 {
   Clear();
   tr_in->GetEntry(n);
+
+#ifdef DEBUGCUT
   if(n<10){
     std::cout << "clover_hit " << clover_hit << std::endl;
     std::cout << "clover_id " << clover_id[0] << std::endl;
     std::cout << "clover_energy " << clover_energy[0] << std::endl;
   }
+#endif
 
   if(csi_hit==0){
     return;
@@ -308,11 +314,14 @@ void Cut::ProcessEntry(Long64_t n)
 //
 void Cut::Process()
 {
+  benchmark->Start("cut");
   for(Long64_t i=0;i<total_entry;i++){
   //for(Long64_t i=0;i<1000;i++){
+#ifdef DEBUGCUT
     if(i%100000==0){
       std::cout << i << std::endl;
     }  
+#endif
     ProcessEntry(i);
   }
 
@@ -320,6 +329,7 @@ void Cut::Process()
   file_out->cd();
   tr_out->Write();
   file_out->Close();
+  benchmark->Show("cut");
 }
 
 //

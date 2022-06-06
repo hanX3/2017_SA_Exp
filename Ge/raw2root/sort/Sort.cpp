@@ -44,7 +44,9 @@ void Sort::AddBack(Int_t c)
   for(int i=0;i<4;i++){
     tr[i] = (TTree*)file_in->Get(TString::Format("tr_Clover_ch%02d",4*c+i).Data());
 	if(!tr[i]){
+#ifdef DEBUGSORT
 	  std::cout << "clover " << c << " empty tree" << std::endl;
+#endif
 	  return;
 	}
 	

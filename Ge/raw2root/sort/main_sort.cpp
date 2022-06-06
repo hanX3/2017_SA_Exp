@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
   int run = atoi(argv[1]);
   int index = atoi(argv[2]);
   TString file_in = TString::Format("../../../../data/Ge/root/R%04d_%04d_decode_2.root", run, index);
-  std::cout << "alignment " << file_in << std::endl;
+  std::cout << "sort " << file_in << std::endl;
   
   TString file_out = TString::Format("../../../../data/Ge/root/R%04d_%04d_sort_2.root", run, index);
 

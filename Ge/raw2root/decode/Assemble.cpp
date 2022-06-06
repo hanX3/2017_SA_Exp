@@ -16,7 +16,9 @@ Assemble::Assemble(const std::string &filename_in, const std::string &filename_o
   tr_in->SetBranchAddress("timestamp", &timestamp_in);
 
   total_nevt = tr_in->GetEntries();
+#ifdef DEBUGASSEMBLE
   std::cout << "total_nevt " << total_nevt << std::endl;
+#endif
 
   file_out = TFile::Open(filename_out.c_str(), "recreate");
   tr = new TTree("tr", "tmp rootfile 2");
@@ -79,7 +81,9 @@ bool Assemble::ProcessEntryClover()
   for(int i=0;i<4;i++)  qdc[i] = 0;
   if(timestamp_in < timestamp_previous){
     k_time++;
+#ifdef DEBUGASSEMBLE
     std::cout << "k_time " << k_time << " nevt " << nevt << std::endl;
+#endif
   }
   timestamp = (Long64_t)((Long64_t)(timestamp_in)+(Long64_t)(268435455)*(Long64_t)(k_time));
 
@@ -137,7 +141,9 @@ bool Assemble::ProcessEntryCsI()
   adc = qdc[0];
   if(timestamp_in < timestamp_previous){
     k_time++;
+#ifdef DEBUGASSEMBLE
     std::cout << "k_time " << k_time << " nevt " << nevt << std::endl;
+#endif
   }
   timestamp = (Long64_t)((Long64_t)(timestamp_in)+(Long64_t)(268435455)*(Long64_t)(k_time));
 
@@ -153,11 +159,11 @@ void Assemble::Process()
 
   while(true){
     if(nevt >= total_nevt) break;
-
+#ifdef DEBUGASSEMBLE
     if(nevt%1000000==0){
       std::cout << "nevt " << nevt << std::endl;
     }
-
+#endif
     tr_in->GetEntry(nevt);
     if(GetLabelType(label_in)==1){
       if(ProcessEntryClover()){
@@ -195,8 +201,10 @@ void Assemble::Process()
 
   file_in->Close();
 
+#ifdef DEBUGASSEMBLE
   std::cout << "nevt " << nevt << std::endl;
   std::cout << "nevt_abandon " << nevt_abandon << std::endl;
+#endif  
   benchmark->Show("assemble"); 
 }
 

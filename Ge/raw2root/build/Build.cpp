@@ -23,7 +23,9 @@ Build::Build(const std::string &filename_in1, const std::string &filename_in2, c
       tr_clover[i]->SetBranchAddress("timestamp_cali_addback", &timestamp_clover);
 
 	  total_entry += tr_clover[i]->GetEntries();
+#ifdef DEBUGBUILD
 	  std::cout << i << " entry " << tr_clover[i]->GetEntries() << std::endl;
+#endif
 	}
   }
 
@@ -35,11 +37,15 @@ Build::Build(const std::string &filename_in1, const std::string &filename_in2, c
       tr_csi[i]->SetBranchAddress("timestamp", &timestamp_csi);
 
 	  total_entry += tr_csi[i]->GetEntries();
+#ifdef DEBUGBUILD
 	  std::cout << i << " entry " << tr_csi[i]->GetEntries() << std::endl;
+#endif
 	}
   }
 
+#ifdef DEBUGBUILD
   std::cout << "total_entry " << total_entry << std::endl;
+#endif
 
   ts = (Long64_t*)malloc(total_entry*sizeof(Long64_t));
   ts_id = (Int_t*)malloc(total_entry*sizeof(Int_t));
@@ -79,8 +85,10 @@ void Build::Sort()
     if(!tr_clover[i]) continue;
 	nentries[i] = tr_clover[i]->GetEntries();
 	for(int j=0;j<tr_clover[i]->GetEntries();j++){
+#ifdef DEBUGBUILD
 	  if(total_entry%10000000==0) std::cout << "clover " << total_entry << std::endl;
-      tr_clover[i]->GetEntry(j);
+#endif
+          tr_clover[i]->GetEntry(j);
 	  ts[total_entry] = timestamp_clover;
 	  total_entry++;
 	}
@@ -90,22 +98,24 @@ void Build::Sort()
     if(!tr_csi[i]) continue;
 	nentries[CLOVERNUMBER+i] = tr_csi[i]->GetEntries();
 	for(int j=0;j<tr_csi[i]->GetEntries();j++){
+#ifdef DEBUGBUILD
 	  if(total_entry%10000000==0) std::cout << "csi " << total_entry << std::endl;
+#endif
 	  tr_csi[i]->GetEntry(j);
 	  ts[total_entry] = timestamp_csi;
 	  total_entry++;
 	}
   }
 
-#ifdef DEBUGMERGE
+#ifdef DEBUGBUILD
   for(int i=0;i<(CLOVERNUMBER+CSINUMBER);i++){
     std::cout << i << " nentries " << nentries[i] << std::endl;
   } 
+  std::cout << "total_entry " << total_entry << std::endl;
 #endif
 
-  std::cout << "total_entry " << total_entry << std::endl;
   TMath::Sort((Int_t)total_entry, (Long64_t*)ts, (Int_t*)ts_id, kFALSE);
-#ifdef DEBUGMERGE
+#ifdef DEBUGBUILD
   for(int i=0;i<10;i++){
     std::cout << ts[i] << " " << ts_id[i] << std::endl;
   }
@@ -118,7 +128,7 @@ void Build::Sort()
 	for(int j=0;j<=i;j++)  max_tag[i] += nentries[j];
   }
 
-#ifdef DEBUGMERGE
+#ifdef DEBUGBUILD
   for(int i=0;i<(CLOVERNUMBER+CSINUMBER);i++){
     std::cout << i << " min_tag " << min_tag[i] << std::endl;
     std::cout << i << " max_tag " << max_tag[i] << std::endl;
@@ -132,7 +142,7 @@ void Build::Sort()
 
   for(Long64_t i=0;i<total_entry;i++){
   //for(int i=0;i<10;i++){
-#ifdef DEBUGMERGE
+#ifdef DEBUGBUILD
     std::cout << "ts " << ts[i] << " ts_id " << ts_id[i] << std::endl;
 #endif
 	if(total_entry%100000==0) std::cout << "entry " << total_entry << std::endl;
@@ -143,7 +153,7 @@ void Build::Sort()
 		break;
 	  }
 	}
-#ifdef DEBUGMERGE
+#ifdef DEBUGBUILD
     std::cout << "tr_id " << tr_id << std::endl;
     std::cout << "tr_entry " << tr_entry << std::endl;
 #endif
@@ -252,10 +262,12 @@ void Build::Sort()
 //
 void Build::Process()
 {
+  benchmark->Start("build"); 
   Sort();
   file_out->cd();
   tr_out->Write();
   file_out->Close();
+  benchmark->Show("build"); 
 }
 
 //

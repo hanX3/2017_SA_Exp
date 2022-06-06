@@ -28,7 +28,7 @@ void analysis()
   //tr->Draw("csi_qdc2[0]-2./3.*csi_qdc1[0]:2.*csi_qdc4[0]-2.*csi_qdc1[0]>>(2000,0,20000,400,0,4000)","csi_hit==1 && csi_id[0]==38&&csi_qdc3[0]<5000&&csi_qdc3[0]>3500&&csi_qdc2[0]>6000&&csi_qdc1[0]<9300","colz");
   //tr->Draw("csi_qdc2[0]-2./3.*csi_qdc1[0]:2.*csi_qdc4[0]-2.*csi_qdc1[0]>>(2000,0,20000,400,0,4000)","csi_hit==1 && csi_id[0]==39&&csi_qdc3[0]<5000&&csi_qdc3[0]>3500&&csi_qdc2[0]>6000&&csi_qdc1[0]<9300","colz");
 
-  TFile *file_in = TFile::Open("../../../../data/Ge/root/R0047_0001_decode_2.root");
+  TFile *file_in = TFile::Open("../../../../data/Ge/root/R0057_0000_decode_2.root");
 
   tr_CsI_ch16->Draw("(qdc[1]-0.667*qdc[0]):(2.*qdc[3]-2.*qdc[0])>>(2000,0,20000,400,0,4000)","qdc[1]>6000&&qdc[1]<9000&&qdc[2]>3500&&qdc[2]<5000&&qdc[3]>10000","colz")
 
