@@ -6,7 +6,7 @@ void cut_proton()
 {
   gROOT->SetBatch(1);
 
-	TFile *file_in = TFile::Open("cut.root");
+	TFile *file_in = TFile::Open("../../../cut.root");
 	if(file_in->IsZombie()){
 		cout << "wrong open the file" << endl;\
 		return;
@@ -18,7 +18,7 @@ void cut_proton()
   tr->Draw("clover_cut_energy>>h1", "proton_num==3");
 
   ofstream file_out;
-  file_out.open("cut_3p.txt");
+  file_out.open("../../../cut_3p.txt");
   for(int i=0;i<2048;i++){
   	file_out << i << "  " << h1->GetBinContent(i) << endl;
   }
