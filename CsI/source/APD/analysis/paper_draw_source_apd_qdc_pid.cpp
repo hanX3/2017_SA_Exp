@@ -1,5 +1,5 @@
 
-void paper_draw_qdc_pid()
+void paper_draw_source_apd_qdc_pid()
 {
   TStyle *han_style= new TStyle("han_style","");
 
@@ -38,19 +38,24 @@ void paper_draw_qdc_pid()
   gStyle->SetLineWidth(2);
 
   gStyle->SetOptLogz();
-  gStyle->SetTextSize(0.1);
+  gStyle->SetTextSize(0.08);
   gStyle->SetTextFont(22);
 
   //gROOT->SetBatch(1);
 
   // real code
-  TFile *file_in = TFile::Open("../../../draw_th1.root");
+  TFile *file_in = TFile::Open("../../../../../data/CsI/source/run_R0040/run_R0040_ana_all.root");
   if(file_in->IsZombie()){
-    cout << "wrong open the file" << endl;\
+    cout << "wrong open the file" << endl;
     return;
   }
 
-  TH2D *h = (TH2D*)file_in->Get("h_csi_ch16");
+  TTree *tr = (TTree*)file_in->Get("tr");
+  
+  //
+  TH2D *h = new TH2D("h", "", 800,0,800,500,0,500);
+  tr->Draw("qdc_short:qdc_long>>h","","colz");
+ 
   TCanvas *cav = new TCanvas("cav", "", 0, 0, 520, 360);
   cav->cd();
 
@@ -58,22 +63,20 @@ void paper_draw_qdc_pid()
   h->GetXaxis()->SetTitleSize(0.06);
   h->GetYaxis()->SetTitle("Short QDC");
   h->GetYaxis()->SetTitleSize(0.06);
-  h->GetXaxis()->SetRangeUser(100, 20000);
-  h->GetYaxis()->SetRangeUser(100, 3000);
+  h->GetXaxis()->SetRangeUser(50, 800);
+  h->GetYaxis()->SetRangeUser(50, 500);
   h->GetXaxis()->CenterTitle();
   h->GetYaxis()->CenterTitle();
 
   h->Draw("colz");
 
-  TLatex *tex_p = new TLatex(16000,2000,"p");
-  TLatex *tex_a = new TLatex(13000,2400,"#alpha");
-  TLatex *tex_g = new TLatex(3000,1600,"#gamma + PD");
+  TLatex *tex_g = new TLatex(430,220,"#gamma + CsI");
+  TLatex *tex_a = new TLatex(560,350,"#alpha + CsI");
 
-  tex_p->Draw();
-  tex_a->Draw();
   tex_g->Draw();
+  tex_a->Draw();
 
-  cav->SaveAs("qdc_pid.pdf");
+  cav->SaveAs("source_apd_qdc_pid.pdf");
 
   //file_in->Close();
 }
