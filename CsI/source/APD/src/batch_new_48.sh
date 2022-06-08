@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-./clean.sh
+rm ../../../../../data/CsI/source/run_R0048/*.root
 
 ./ana_batch 48 0 1000 &
 ./ana_batch 48 1000 2000 &
