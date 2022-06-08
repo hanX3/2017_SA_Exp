@@ -1,11 +1,11 @@
 
 void get_gamma_th1()
 {
-	TFile *file_in = TFile::Open("../../../draw_th1.root");
-	if(file_in->IsZombie()){
-		cout << "wrong open the file" << endl;\
-		return;
-	}
+  TFile *file_in = TFile::Open("../../../draw_th1.root");
+  if(file_in->IsZombie()){
+    cout << "wrong open the file" << endl;
+    return;
+  }
 
   TH1D *h0 = (TH1D*)file_in->Get("h0");
   TH1D *h1 = (TH1D*)file_in->Get("h1");
