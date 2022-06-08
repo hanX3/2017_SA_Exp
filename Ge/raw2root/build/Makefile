@@ -1,8 +1,6 @@
-out1 = build
-out2 = sort
+out = build
 
-sourcefile1 = main.cpp Build.h Build.cpp set.h
-sourcefile2 = main.cpp Build.h Build.cpp set.h
+sourcefile = main.cpp Build.h Build.cpp set.h
 
 ROOTCFLAGS  = $(shell root-config --cflags)
 ROOTLIBS    = $(shell root-config --libs) -lSpectrum
@@ -11,15 +9,13 @@ CFLAGS = -g -Wall -std=c++11 -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 
 GXX = g++
 
-all:$(out1) $(out2)
+all:$(out)
 
-$(out1): $(sourcefile1)
-	$(GXX) $(CFLAGS) $(ROOTCFLAGS) -o $@ $(filter %.cpp ,$(sourcefile1)) $(ROOTLIBS)
-$(out2): $(sourcefile2)
-	$(GXX) $(CFLAGS) $(ROOTCFLAGS) -o $@ $(filter %.cpp ,$(sourcefile2)) $(ROOTLIBS)
+$(out): $(sourcefile)
+	$(GXX) $(CFLAGS) $(ROOTCFLAGS) -o $@ $(filter %.cpp ,$(sourcefile)) $(ROOTLIBS)
 
 install:
-	cp $(out1) $(out2) ../
+	cp $(out) ../
 	cp * ./.backup
 clean:
-	rm -f *~ *.o $(out1) $(out2)
+	rm -f *~ *.o $(out)
