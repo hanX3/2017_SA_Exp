@@ -17,6 +17,7 @@
 #include <stdlib.h>
 
 #include <iostream>
+#include <fstream>
 
 struct TRAPZ_PAR{
   Double_t decay_length;   // decay time of input trace (in points)

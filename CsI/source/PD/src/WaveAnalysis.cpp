@@ -338,6 +338,9 @@ void WaveAnalysis::FitWave(Long64_t n)
   cav2->cd();
   h->Draw();
   h->Fit(tf, "WR");
+
+
+
 #else
   h->Fit(tf, "QWN0RS");
   fit_result.tau_fast = tf->GetParameter(3);
@@ -388,6 +391,15 @@ void WaveAnalysis::DrawEntry(Long64_t n)
 
   //
   FitWave(n);
+
+  // get_data
+  std::ofstream file_out;
+  file_out.open(TString::Format("wave_dsp_id%06lld.txt",n).Data());
+  for(int i=0;i<ltra;i++){
+    file_out << i << "  " << (Double_t)data_bl[i] << "  " << (Double_t)data_rccr2[i] << "  " << (Double_t)data_trapz[i] << std::endl;
+  }
+  file_out.close();
+
 }
 #endif
 
