@@ -199,6 +199,7 @@ bool WaveAnalysis::ProcessEntry(Long64_t n)
   if(hit_num>0){
     Trapezoid(n);  
   }
+  trapz_result.trigger_num = hit_num;
   for(UInt_t i=0;i<hit_num;i++){
     e_sum = 0;
     e_start = (UInt_t)(trapz_result.time_tag[i]) + trapz_par.peak_delay;

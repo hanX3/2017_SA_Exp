@@ -161,8 +161,8 @@ bool WaveAnalysis::ProcessEntry(Long64_t n)
           if(hit_num<PILEUPMAX){
             trapz_result.time_tag[hit_num] = (Double_t)i + (Double_t)data_rccr2[i]/((Double_t)data_rccr2[i]-(Double_t)data_rccr2[i+1]);
             hit_num++;
-	      }
-	    }
+          } 
+        }
       }
     }
 
@@ -189,6 +189,7 @@ bool WaveAnalysis::ProcessEntry(Long64_t n)
   trapz_par.pre_trigger = (trapz_result.time_tag[0]>20)?(trapz_result.time_tag[0]-20):20;
 
 #ifdef DEBUGWAVEANALYSIS
+  std::cout << "hit_num " << hit_num << std::endl;
   std::cout << "peak_delay " << trapz_par.peak_delay << std::endl;
   std::cout << "peak_mean " << trapz_par.peak_mean << std::endl;
   std::cout << "pre_trigger " << trapz_par.pre_trigger << std::endl;
@@ -197,8 +198,9 @@ bool WaveAnalysis::ProcessEntry(Long64_t n)
   Double_t e_sum = 0;
   UInt_t e_start = 0;
   if(hit_num>0){
-    Trapezoid(n);  
+    Trapezoid(n);
   }
+  trapz_result.trigger_num = hit_num;
   for(UInt_t i=0;i<hit_num;i++){
     e_sum = 0;
     e_start = (UInt_t)(trapz_result.time_tag[i]) + trapz_par.peak_delay;
