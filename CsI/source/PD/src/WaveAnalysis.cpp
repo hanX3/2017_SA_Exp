@@ -340,8 +340,24 @@ void WaveAnalysis::FitWave(Long64_t n)
   h->Draw();
   h->Fit(tf, "WR");
 
+  //get data
+  Double_t am1 = tf->GetParameter(5);
+  Double_t am2 = tf->GetParameter(6);
 
-
+  std::ofstream fo1;
+  fo1.open(TString::Format("wave_fit_id%06lld.txt",n).Data());
+  for(int i=0;i<ltra*4;i++){
+    tf->SetParameter(5, am1);
+    tf->SetParameter(6, am2);
+    fo1 << (Double_t)i/4. << " " << tf->Eval((Double_t)i/4.) << " ";
+    tf->SetParameter(5, am1);
+    tf->SetParameter(6, 0);
+    fo1 << tf->Eval((Double_t)i/4.) << " ";
+    tf->SetParameter(5, 0);
+    tf->SetParameter(6, am2);
+    fo1 << tf->Eval((Double_t)i/4.) << " " << std::endl;
+  }
+  fo1.close();
 #else
   h->Fit(tf, "QWN0RS");
   fit_result.tau_fast = tf->GetParameter(3);

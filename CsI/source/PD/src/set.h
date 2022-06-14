@@ -1,13 +1,13 @@
 //#define DEBUGWAVEANALYSIS
-#define DEBUGDRAWOPTION
+//#define DEBUGDRAWOPTION
 
 #define MAXLENGTH 32768
 #define POLARITY 1
 
 // CFD Parameters
 #define CFDPARPRITRIGGER    500
-#define CFDPARSMOOTHLENGTH  60
-#define CFDPARRISELENGTH    60
+#define CFDPARSMOOTHLENGTH  30
+#define CFDPARRISELENGTH    40
 #define CFDPARTHRESHOLD     30
 
 // Trapezoid Parameters
@@ -36,7 +36,7 @@
 #define T0                  900.
 #define T0MIN               600.
 #define T0MAX               1200.
-#define TAURC               1200.
+#define TAURC               1540.
 #define TAURCMIN            1000.
 #define TAURCMAX            4000.
 #define TAUFAST             60.
