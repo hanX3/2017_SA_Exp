@@ -9,6 +9,7 @@ Double_t Fun1s(Double_t *i, Double_t *p);
 Double_t FunA(Double_t *i, Double_t *p);
 Double_t FunB(Double_t *i, Double_t *p);
 Double_t FunC(Double_t *i, Double_t *p);
+Double_t FunD(Double_t *i, Double_t *p);
 
 //
 void pileup(Long64_t n)
@@ -75,7 +76,6 @@ void pileup(Long64_t n)
 
   h1->Draw();
 
-  //expo fit
   // TF1 *tfa = new TF1("tfa", FunA, 0, 10000, 5);
   // tfa->SetParameter(0, 0);
   // tfa->SetParameter(1, 600);
@@ -91,12 +91,25 @@ void pileup(Long64_t n)
   // tfb->SetParameter(3, 400);
   // h1->Fit("tfb", "RW");
 
-  TF1 *tfc = new TF1("tfc", FunC, 0, 10000, 2);
-  tfc->SetParameter(0, 0);
-  tfc->SetParameter(1, 600);
-  h1->Fit("tfc", "RW");
+  // TF1 *tfc = new TF1("tfc", FunC, 0, 10000, 3);
+  // tfc->SetParameter(0, 0);
+  // tfc->SetParameter(1, 600);
+  // tfc->SetParameter(2, 1000); 
+  // h1->Fit("tfc", "RW");
 
+  TF1 *tfd = new TF1("tfd", FunD, 0, 10000, 9);
+  tfd->SetParameter(0, 0);
+  tfd->SetParameter(1, 600);
+  tfd->SetParameter(2, 4000);
+  tfd->SetParameter(3, 50);
+  tfd->SetParameter(4, 1000);
+  tfd->SetParameter(5, 500);
+  tfd->SetParameter(6, 1000);
+  tfd->SetParameter(7, 2500);
+  tfd->SetParameter(8, 1000);
+  h1->Fit("tfd", "RW");
 
+  
   return ;
 }
 
@@ -135,8 +148,33 @@ Double_t FunC(Double_t *i, Double_t *p)
 
   if(x<0) return s;
   else{
-    s += exp(-(log(x*x)));
+    s += p[2]*exp(-(log(x*x)));
     return s;
+  }
+}
+
+//
+// p[0]: baseline
+// p[1]: t0 (in points)
+// p[2]: tau rc (in points)
+// p[3]: tau 1 (in points)
+// p[4]: am 1
+// p[5]: tau 2 (in points)
+// p[6]: am 2
+// p[7]: tau 3 (in points)
+// p[8]: am 3
+Double_t FunD(Double_t *i, Double_t *p)
+{
+  Double_t s = p[0];
+  Double_t x = i[0] - p[1];
+  Double_t e = exp(-x/p[2]);
+
+  if(x<0) return s;
+  else{
+    s += p[4]*(1-exp(-x/p[3]))*e; 
+    s += p[6]*(1-exp(-x/p[5]))*e;
+    s += p[8]*(1-exp(-x/p[7]))*e;
+  return s;
   }
 }
 
