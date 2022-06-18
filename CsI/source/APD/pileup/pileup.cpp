@@ -3,13 +3,14 @@
 
 //
 Double_t Fun1s(Double_t *i, Double_t *p);
-// Double_t Fun2s(Double_t *i, Double_t *p);
-// Double_t Fun3s(Double_t *i, Double_t *p);
+Double_t Fun2s(Double_t *i, Double_t *p);
+Double_t Fun3s(Double_t *i, Double_t *p);
 
 Double_t FunA(Double_t *i, Double_t *p);
 Double_t FunB(Double_t *i, Double_t *p);
 Double_t FunC(Double_t *i, Double_t *p);
 Double_t FunD(Double_t *i, Double_t *p);
+Double_t FunE(Double_t *i, Double_t *p);
 
 //
 void pileup(Long64_t n)
@@ -97,18 +98,73 @@ void pileup(Long64_t n)
   // tfc->SetParameter(2, 1000); 
   // h1->Fit("tfc", "RW");
 
-  TF1 *tfd = new TF1("tfd", FunD, 0, 10000, 9);
-  tfd->SetParameter(0, 0);
-  tfd->SetParameter(1, 600);
-  tfd->SetParameter(2, 4000);
-  tfd->SetParameter(3, 50);
-  tfd->SetParameter(4, 1000);
-  tfd->SetParameter(5, 500);
-  tfd->SetParameter(6, 1000);
-  tfd->SetParameter(7, 2500);
-  tfd->SetParameter(8, 1000);
-  h1->Fit("tfd", "RW");
+  // TF1 *tfd = new TF1("tfd", FunD, 0, 10000, 9);
+  // tfd->SetParameter(0, 0);
+  // tfd->SetParameter(1, 600);
+  // tfd->SetParameter(2, 4000);
+  // tfd->SetParameter(3, 50);
+  // tfd->SetParameter(4, 1000);
+  // tfd->SetParameter(5, 500);
+  // tfd->SetParameter(6, 1000);
+  // tfd->SetParameter(7, 2500);
+  // tfd->SetParameter(8, 1000);
+  // h1->Fit("tfd", "RW");
 
+  // TF1 *tfe = new TF1("tfe", FunE, 0, 10000, 11);
+  // tfe->SetParameter(0, 0);
+  // tfe->SetParameter(1, 600);
+  // tfe->SetParameter(2, 4000);
+  // tfe->SetParameter(3, 10);
+  // tfe->SetParameter(4, 1000);
+  // tfe->SetParameter(5, 100);
+  // tfe->SetParameter(6, 1000);
+  // tfe->SetParameter(7, 500);
+  // tfe->SetParameter(8, 1000);
+  // tfe->SetParameter(9, 2000);
+  // tfe->SetParameter(10, 1000);
+  // h1->Fit("tfe", "RW");
+
+  // TF1 *tf1s = new TF1("tf1s", Fun1s, 0, 10000, 7);
+  // tf1s1->SetParameter(0, 0);
+  // tf1s->SetParameter(1, 600);
+  // tf1s->SetParameter(2, 4000);
+  // tf1s->SetParameter(3, 100);
+  // tf1s->SetParameter(4, 1000);
+  // tf1s->SetParameter(5, 500);
+  // tf1s->SetParameter(6, 1000);
+  // h1->Fit("tf1s", "RW");
+
+  TVirtualFitter::SetDefaultFitter("Minuit2");
+  ROOT::Math::MinimizerOptions::SetDefaultMaxFunctionCalls(10000);
+  ROOT::Math::MinimizerOptions::SetDefaultTolerance(0.1);
+
+  TF1 *tf2s = new TF1("tf2s", Fun2s, 4800, 10000, 12);
+  tf2s->SetParameter(0, 0);
+  tf2s->SetParLimits(0, -1, 1);
+  tf2s->SetParameter(1, 4500);
+  tf2s->SetParameter(2, 400);
+  tf2s->SetParLimits(2, 200, 600);
+  tf2s->SetParameter(3, 100);
+  tf2s->SetParLimits(3, 50, 600);
+  tf2s->SetParameter(4, 1000);
+  tf2s->SetParLimits(4, 10, 3000);
+  tf2s->SetParameter(5, 1800);
+  tf2s->SetParLimits(5, 1000, 6000);
+  tf2s->SetParameter(6, 1000);
+  tf2s->SetParLimits(6, 10, 3000);
+  tf2s->SetParameter(7, 8000);
+  tf2s->SetParLimits(7, 7000, 9000);
+  tf2s->SetParameter(8, 100);
+  tf2s->SetParLimits(8, 50, 600);
+  tf2s->SetParameter(9, 1000);
+  tf2s->SetParLimits(9, 10, 3000);
+  tf2s->SetParameter(10, 1800);
+  tf2s->SetParLimits(10, 1000, 6000);
+  tf2s->SetParameter(11, 1000);
+  tf2s->SetParLimits(11, 10, 3000);
+  for(int i=0;i<400;i++)
+    h1->Fit("tf2s", "RWM");
+  // tf2s->Draw();
   
   return ;
 }
@@ -174,7 +230,35 @@ Double_t FunD(Double_t *i, Double_t *p)
     s += p[4]*(1-exp(-x/p[3]))*e; 
     s += p[6]*(1-exp(-x/p[5]))*e;
     s += p[8]*(1-exp(-x/p[7]))*e;
-  return s;
+    return s;
+  }
+}
+
+//
+// p[0]: baseline
+// p[1]: t0 (in points)
+// p[2]: tau rc (in points)
+// p[3]: tau 1 (in points)
+// p[4]: am 1
+// p[5]: tau 2 (in points)
+// p[6]: am 2
+// p[7]: tau 3 (in points)
+// p[8]: am 3
+// p[9]: tau 4 (in points)
+// p[10]: am 4
+Double_t FunE(Double_t *i, Double_t *p)
+{
+  Double_t s = p[0];
+  Double_t x = i[0] - p[1];
+  Double_t e = exp(-x/p[2]);
+
+  if(x<0) return s;
+  else{
+    s += p[4]*(1-exp(-x/p[3]))*e; 
+    s += p[6]*(1-exp(-x/p[5]))*e;
+    s += p[8]*(1-exp(-x/p[7]))*e;
+    s += p[10]*(1-exp(-x/p[9]))*e;
+    return s;
   }
 }
 
@@ -183,8 +267,8 @@ Double_t FunD(Double_t *i, Double_t *p)
 // p[1]: t0 (in points)
 // p[2]: tau rc (in points)
 // p[3]: tau fast (in points)
-// p[4]: tau slow (in points)
-// p[5]: am fast
+// p[4]: am fast
+// p[5]: tau slow (in points)
 // p[6]: am slow
 Double_t Fun1s(Double_t *i, Double_t *p)
 {
@@ -194,30 +278,47 @@ Double_t Fun1s(Double_t *i, Double_t *p)
 
   if(x<0) return s;
   else{
-    s += p[5]*(1-exp(-x/p[3]))*e; 
-    s += p[6]*(1-exp(-x/p[4]))*e;
-  return s;
+    s += p[4]*(1-exp(-x/p[3]))*e; 
+    s += p[6]*(1-exp(-x/p[5]))*e;
+    return s;
   }
 }
 
-// //
-// // p[0]: baseline
-// // p[1]: 0 --> t0 (in points)
-// // p[2]: tau rc (in points)
-// // p[3]: 0 --> tau fast (in points)
-// // p[4]: 0 --> tau slow (in points)
-// // p[5]: 0 --> am fast
-// // p[6]: 0 --> am slow
-// Double_t Fun2s(Double_t *i, Double_t *p)
-// {
-//   Double_t s = p[0];
-//   Double_t x = i[0] - p[1];
-//   Double_t e = exp(-x/p[2]);
+//
+// p[0]: baseline
+// p[1]: tau rc (in points)
+// p[2]: 0 --> t0 (in points)
+// p[3]: 0 --> tau fast (in points)
+// p[4]: 0 --> am fast
+// p[5]: 0 --> tau slow (in points)
+// p[6]: 0 --> am slow
+// p[7]: 1 --> t0 (in points)
+// p[8]: 1 --> tau fast (in points)
+// p[9]: 1 --> am fast
+// p[10]: 1 --> tau slow (in points)
+// p[11]: 1 --> am slow
+Double_t Fun2s(Double_t *i, Double_t *p)
+{
+  Double_t s = 0;
+  Double_t x = 0;
+  Double_t e = 0;
 
-//   if(x<0) return s;
-//   else if(){
-//     s += p[5]*(1-exp(-x/p[3]))*e; 
-//     s += p[6]*(1-exp(-x/p[4]))*e;
-//   return s;
-//   }
-// }
+  if((i[0]-p[2])<0) return p[0];
+  else if((i[0]-p[2])>=0 && (i[0]-p[7])<0){
+    x = i[0]-p[2];
+    e = exp(-x/p[1]);
+    s += p[0];
+    s += p[4]*(1-exp(-x/p[3]))*e;
+    s += p[6]*(1-exp(-x/p[5]))*e;
+    return s;
+  }else{
+    x = i[0]-p[7];
+    e = exp(-x/p[1]);
+    s += p[0];
+    s += p[4]*(1-exp(-x/p[3]))*e;
+    s += p[6]*(1-exp(-x/p[5]))*e;
+    s += p[9]*(1-exp(-x/p[8]))*e;
+    s += p[11]*(1-exp(-x/p[10]))*e;
+    return s;
+  }
+}
