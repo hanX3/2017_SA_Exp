@@ -118,12 +118,15 @@ private:
   Int_t entry_stop;
 
 private:
+  Double_t b_std_sqrt;
+  
   TRAPZ_PAR trapz_par;
   CFD_PAR cfd_par;
   TRAPZ_RESULT trapz_result;
 
   UShort_t ltra;
   UShort_t data[MAXLENGTH];
+  Double_t data_pol[MAXLENGTH];
   Double_t data_bl[MAXLENGTH];
   Double_t data_rccr2[MAXLENGTH];
   Double_t data_trapz[MAXLENGTH];

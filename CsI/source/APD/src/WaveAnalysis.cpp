@@ -25,9 +25,9 @@ WaveAnalysis::WaveAnalysis(const std::string &filename_in, const std::string &fi
   memset(data_rccr2, 0, MAXLENGTH*sizeof(Double_t));
   memset(data_trapz, 0, MAXLENGTH*sizeof(Double_t));
 
-  cfd_par.pre_trigger = CFDPARPRITRIGGER;
-  cfd_par.smooth_length = CFDPARSMOOTHLENGTH;
-  cfd_par.rise_length = CFDPARRISELENGTH;
+  cfd_par.pre_trigger = RCCR2PARPRETRIGGER;
+  cfd_par.smooth_length = RCCR2PARSMOOTHLENGTH;
+  cfd_par.rise_length = RCCR2PARRISELENGTH;
 
   trapz_par.decay_length = TRAPPARDECAYLENGTH;
   trapz_par.rise_length = TRAPPARRISELENGTH;
@@ -72,6 +72,8 @@ WaveAnalysis::WaveAnalysis(const std::string &filename_in, const std::string &fi
 
   file_out = new TFile(filename_out.c_str(), "recreate");
   tr_out = new TTree("tr", "wave analysis info");
+  tr_out->Branch("b_std_sqrt", &b_std_sqrt, "b_std_sqrt/D");
+
   TString leaf1 = TString::Format("energy[%d]/D:time_tag[%d]/D:trigger_num/s", PILEUPMAX, PILEUPMAX);
   TString leaf2 = TString::Format("qdc_short/D:qdc_long/D");
   TString leaf3 = TString::Format("tau_fast/D:tau_slow/D:am_fast/D:am_slow/D");
@@ -99,10 +101,10 @@ bool WaveAnalysis::GetWave(Long64_t n)
   memset(data, 0, sizeof(UShort_t)*MAXLENGTH);
   tr_in->GetEntry(n);
   for(UInt_t i=0;i<ltra;i++){
-    data[i] *= POLARITY;
+    data_pol[i] = data[i]*POLARITY;
   }
 
-  cfd_par.threshold = CFDPARTHRESHOLD;
+  cfd_par.threshold = RCCR2PARTHRESHOLD;
   memset(&trapz_result, 0, sizeof(TRAPZ_RESULT));
 
   return true;
@@ -137,9 +139,21 @@ bool WaveAnalysis::ProcessEntry(Long64_t n)
 {
   GetWave(n);
 
+  // Baseline check
+  Double_t b = 0.;
+  for(int i=0;i<PRETRIGGER;i++){
+    b += data_pol[i];
+  }
+  b /= (Double_t)PRETRIGGER;
+  Double_t b_std = 0.;
+  for(int i=0;i<PRETRIGGER;i++){
+    b_std += (data_pol[i]-b)*(data_pol[i]-b);
+  }
+  b_std_sqrt = sqrt(b_std)/PRETRIGGER;
+
   // Energy
   RCCR2(n);
-  cfd_par.threshold = CFDPARTHRESHOLD; 
+  cfd_par.threshold = RCCR2PARTHRESHOLD;
   Bool_t trigger_armed = 0;
   UInt_t ii, jj = 0;
   UShort_t hit_num;
@@ -152,11 +166,11 @@ bool WaveAnalysis::ProcessEntry(Long64_t n)
       if(trigger_armed==0 && data_rccr2[i]>=cfd_par.threshold){
         trigger_armed = 1;
         ii = i-1;
-        ee1 = (data[ii-3]+data[ii-2]+data[ii-1])/3.;
+        ee1 = (data_pol[ii-3]+data_pol[ii-2]+data_pol[ii-1])/3.;
       }
       if(trigger_armed==1 && data_rccr2[i]>=0 && data_rccr2[i+1]<0){
         trigger_armed = 0;
-        ee2 = (data[i+1]+data[i+2]+data[i+3])/3.;
+        ee2 = (data_pol[i+1]+data_pol[i+2]+data_pol[i+3])/3.;
         if(i-ii>=5 && ee2-ee1>=cfd_par.threshold){
           if(hit_num<PILEUPMAX){
             trapz_result.time_tag[hit_num] = (Double_t)i + (Double_t)data_rccr2[i]/((Double_t)data_rccr2[i]-(Double_t)data_rccr2[i+1]);
@@ -242,12 +256,12 @@ void WaveAnalysis::RCCR2(Long64_t n)
 
   baseline = 0.;
   for(UInt_t i=0;i<cfd_par.pre_trigger;i++){
-    baseline += (Double_t)data[i];
+    baseline += data_pol[i];
   }
   baseline /= (Double_t)cfd_par.pre_trigger;
 
   for(UShort_t i=0;i<ltra;i++){
-    data_bl[i] = (Double_t)data[i]-baseline; 
+    data_bl[i] = data_pol[i]-baseline; 
   }
 
   for(UShort_t i=(2*cfd_par.rise_length+cfd_par.smooth_length);i<ltra;i++){
