@@ -24,6 +24,7 @@ Alignment::Alignment(const std::string &filename_in, const std::string &filename
       continue;
     }
     tr_CsI[i]->SetBranchAddress("ch", &ch_CsI);
+    tr_CsI[i]->SetBranchAddress("qdc", qdc_CsI);
     tr_CsI[i]->SetBranchAddress("timestamp", &timestamp_CsI);
   }
 
@@ -95,6 +96,10 @@ void Alignment::GetCsITimestampVector(TTree *tr, std::vector<Long64_t> &vec)
     std::cout << "ts " << ts << std::endl;
 #endif
 
+    // if(qdc_CsI[0]>10000 || qdc_CsI[1]<6000 || qdc_CsI[1]>9000 || qdc_CsI[2]<3500 || qdc_CsI[2]>5000 || qdc_CsI[3]<10000){
+    // if(qdc_CsI[0]<6000){
+    //   continue;
+    // }
     vec.push_back(timestamp_CsI);
   }
 }

@@ -39,6 +39,7 @@ private:
   Long64_t timestamp_Clover;
 
   UShort_t ch_CsI;
+  UShort_t qdc_CsI[4];
   Long64_t timestamp_CsI;
 
   Int_t id_clover;//the first clover channel with data
