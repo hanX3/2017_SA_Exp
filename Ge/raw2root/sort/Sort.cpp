@@ -43,18 +43,18 @@ void Sort::AddBack(Int_t c)
   TTree *tr[4];
   for(int i=0;i<4;i++){
     tr[i] = (TTree*)file_in->Get(TString::Format("tr_Clover_ch%02d",4*c+i).Data());
-	if(!tr[i]){
+    if(!tr[i]){
 #ifdef DEBUGSORT
-	  std::cout << "clover " << c << " empty tree" << std::endl;
+    std::cout << "clover " << c << " empty tree" << std::endl;
 #endif
-	  return;
-	}
-	
-	total_entry += tr[i]->GetEntries();
-	nentries[i] = tr[i]->GetEntries();
-	tr[i]->SetBranchAddress("ch", &ch);
-	tr[i]->SetBranchAddress("adc", &adc);
-	tr[i]->SetBranchAddress("timestamp", &timestamp);
+    return;
+    }
+
+    total_entry += tr[i]->GetEntries();
+    nentries[i] = tr[i]->GetEntries();
+    tr[i]->SetBranchAddress("ch", &ch);
+    tr[i]->SetBranchAddress("adc", &adc);
+    tr[i]->SetBranchAddress("timestamp", &timestamp);
   }
 #ifdef DEBUGSORT
   std::cout << "total_entry " << total_entry << std::endl;
@@ -70,10 +70,10 @@ void Sort::AddBack(Int_t c)
   total_entry = 0;
   for(int i=0;i<4;i++){
     for(Long64_t j=0;j<tr[i]->GetEntries();j++){
-	  tr[i]->GetEntry(j);
-	  ts[total_entry] = timestamp;
+      tr[i]->GetEntry(j);
+      ts[total_entry] = timestamp;
       total_entry++;
-	}
+    }
   }
 
   TMath::Sort((Int_t)total_entry, (Long64_t*)ts, (Int_t*)ts_id, kFALSE);
@@ -100,18 +100,18 @@ void Sort::AddBack(Int_t c)
   memset(&cda, 0, sizeof(cda));
   for(Long64_t i=0;i<total_entry;i++){
     for(int j=0;j<4;j++){
-	  if(ts_id[i]>=min_tag[j] && ts_id[i]<max_tag[j]){
-		tr_id = j;
-		tr_entry = ts_id[i]-min_tag[j];
-		break;
-	  }
-	}
-	tr[tr_id]->GetEntry(tr_entry);
+      if(ts_id[i]>=min_tag[j] && ts_id[i]<max_tag[j]){
+        tr_id = j;
+        tr_entry = ts_id[i]-min_tag[j];
+        break;
+      }
+    }
+    tr[tr_id]->GetEntry(tr_entry);
     cda.id = (Int_t)ch;
-	cda.energy = par[ch][0]+par[ch][1]*(Double_t)adc+par[ch][2]*(Double_t)(adc*adc);
-	cda.timestamp = timestamp;
+    cda.energy = par[ch][0]+par[ch][1]*(Double_t)adc+par[ch][2]*(Double_t)(adc*adc);
+    cda.timestamp = timestamp;
 
-	vec_cd.push_back(cda);
+    vec_cd.push_back(cda);
   }
   free(ts_id);
 
@@ -136,7 +136,7 @@ void Sort::AddBack(Int_t c)
     adc_cali = vec_cd[i].energy;
     timestamp_cali = vec_cd[i].timestamp;
 
-	tr_Clover_cali->Fill();
+  tr_Clover_cali->Fill();
   }
   file_out->cd();
   tr_Clover_cali->Write();
@@ -153,33 +153,33 @@ void Sort::AddBack(Int_t c)
   cda_previous.energy = 0.;
   cda_previous.timestamp = 0;
   for(Long64_t i=0;i<(Long64_t)(vec_cd.size());i++){
-	if((vec_cd[i].timestamp-cda_previous.timestamp)<ADDBACKCOINWINDOW){
-	  multi++;
-	  add_channel += (vec_cd[i].id)%4;
+    if((vec_cd[i].timestamp-cda_previous.timestamp)<ADDBACKCOINWINDOW){
+      multi++;
+      add_channel += (vec_cd[i].id)%4;
 
-	  cda_previous.energy += vec_cd[i].energy;
-	}
-	if((vec_cd[i].timestamp-cda_previous.timestamp)>=ADDBACKCOINWINDOW || i==(Long64_t)(vec_cd.size()-1)){
-	  if(i==0){
-	    cda_previous = vec_cd[i];
-		continue;
+      cda_previous.energy += vec_cd[i].energy;
+    }
+    if((vec_cd[i].timestamp-cda_previous.timestamp)>=ADDBACKCOINWINDOW || i==(Long64_t)(vec_cd.size()-1)){
+      if(i==0){
+        cda_previous = vec_cd[i];
+        continue;
       }
-	  multi++;
-	  cda_previous.id = c;
-	  vec_cd_addback.push_back(cda_previous);
+      multi++;
+      cda_previous.id = c;
+      vec_cd_addback.push_back(cda_previous);
       if(multi==1) multi1++;
-	  else if(multi==3) multi3++;
-	  else if(multi==4) multi4++;
-	  else{
-	    multi2++;
-		if(add_channel==3) multi2_diag++;
-		else multi2_neig++;
-	  }
+      else if(multi==3) multi3++;
+      else if(multi==4) multi4++;
+      else{
+        multi2++;
+        if(add_channel==3) multi2_diag++;
+        else multi2_neig++;
+      }
 
       multi = 0;
-	  add_channel = 0;
-	  cda_previous = vec_cd[i];
-	}
+      add_channel = 0;
+      cda_previous = vec_cd[i];
+    }
   }
 
 #ifdef DEBUGSORT
@@ -208,14 +208,14 @@ void Sort::AddBack(Int_t c)
   tr_Clover_cali_addback->Branch("timestamp_cali_addback", &timestamp_cali_addback, "timestamp_cali_addback/L");
 
   for(Long64_t i=0;i<(Long64_t)(vec_cd_addback.size());i++){
-	if(vec_cd_addback[i].energy<ENERGYMIN || vec_cd_addback[i].energy>ENERGYMAX){
-	  continue;
-	}
+    if(vec_cd_addback[i].energy<ENERGYMIN || vec_cd_addback[i].energy>ENERGYMAX){
+      continue;
+    }
     id_cali_addback = vec_cd_addback[i].id;
     adc_cali_addback = vec_cd_addback[i].energy;
     timestamp_cali_addback = vec_cd_addback[i].timestamp;
 
-	tr_Clover_cali_addback->Fill();
+    tr_Clover_cali_addback->Fill();
   }
   file_out->cd();
   tr_Clover_cali_addback->Write();
@@ -240,7 +240,7 @@ void GetCloverCali(Double_t p[CLOVERCHANNELS][3])
   f.open(TString::Format("%s",CLOVERCALIDATA).Data());
   if(!f){
     std::cout << "can not open " << CLOVERCALIDATA << std::endl;
-	return;
+  return;
   }
 
   Int_t id;
@@ -249,11 +249,11 @@ void GetCloverCali(Double_t p[CLOVERCHANNELS][3])
 
   while(true){
     f >> id >> par0 >> par1 >> par2 >> chi2;
-	if(!f.good()) break;
+    if(!f.good()) break;
 
-	p[id][0] = par0;
-	p[id][1] = par1;
-	p[id][2] = par2;
+    p[id][0] = par0;
+    p[id][1] = par1;
+    p[id][2] = par2;
   }
   f.close();
 }

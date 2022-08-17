@@ -97,7 +97,7 @@ void Alignment::GetCsITimestampVector(TTree *tr, std::vector<Long64_t> &vec)
 #endif
 
     // if(qdc_CsI[0]>10000 || qdc_CsI[1]<6000 || qdc_CsI[1]>9000 || qdc_CsI[2]<3500 || qdc_CsI[2]>5000 || qdc_CsI[3]<10000){
-    // if(qdc_CsI[0]<6000){
+    // if(qdc_CsI[0]<9000){
     //   continue;
     // }
     vec.push_back(timestamp_CsI);
@@ -134,28 +134,30 @@ void Alignment::Process()
         if(k==(Long64_t)v2.size())  break;
         ts2 = v2[k];
 #ifdef DEBUGALIGNMENT
- 	std::cout << j << " ts1 " << ts1 << std::endl;
-	std::cout << k << " ts2 " << ts2 << std::endl;
-	std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
+  std::cout << j << " ts1 " << ts1 << std::endl;
+  std::cout << k << " ts2 " << ts2 << std::endl;
+  std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
 #endif
-	if(abs(ts1-ts2)<ALIGNMENTWINDOW){
+        if(abs(ts1-ts2)<ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-          std::cout << "1" << std::endl;
+  std::cout << "1" << std::endl;
 #endif
-	  h1[i-id_clover-1]->Fill(ts1-ts2);
-	  k++;
-	}else if((ts1-ts2)>ALIGNMENTWINDOW){
+          h1[i-id_clover-1]->Fill(ts1-ts2);
+          k++;
+        }
+        else if((ts1-ts2)>ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-          std::cout << "2" << std::endl;
+  std::cout << "2" << std::endl;
 #endif
-	  k++;
-	}else{
+          k++;
+        }
+        else{
 #ifdef DEBUGALIGNMENT
-	  std::cout << "3" << std::endl;
+    std::cout << "3" << std::endl;
 #endif
-	  j++;
-	  break;
-	}
+          j++;
+          break;
+        }
       }
     }
   }
@@ -177,28 +179,30 @@ void Alignment::Process()
         if(k==(Long64_t)v2.size())  break;
         ts2 = v2[k];
 #ifdef DEBUGALIGNMENT
-	std::cout << j << " ts1 " << ts1 << std::endl;
-	std::cout << k << " ts2 " << ts2 << std::endl;
-	std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
+  std::cout << j << " ts1 " << ts1 << std::endl;
+  std::cout << k << " ts2 " << ts2 << std::endl;
+  std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
 #endif
-	if(abs(ts1-ts2)<ALIGNMENTWINDOW){
+        if(abs(ts1-ts2)<ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-          std::cout << "1" << std::endl;
+  std::cout << "1" << std::endl;
 #endif
-	  h2[i-id_csi-1]->Fill(ts1-ts2);
-	  k++;
-	}else if((ts1-ts2)>ALIGNMENTWINDOW){
+          h2[i-id_csi-1]->Fill(ts1-ts2);
+          k++;
+        }
+        else if((ts1-ts2)>ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-          std::cout << "2" << std::endl;
+  std::cout << "2" << std::endl;
 #endif
-	  k++;
-	}else{
+          k++;
+        }
+        else{
 #ifdef DEBUGALIGNMENT
-	  std::cout << "3" << std::endl;
+  std::cout << "3" << std::endl;
 #endif
-	  j++;
-	  break;
-	}
+          j++;
+          break;
+        }
       }
     }
   }
@@ -220,24 +224,26 @@ void Alignment::Process()
         if(k==(Long64_t)v2.size())  break;
         ts2 = v2[k];
 #ifdef DEBUGALIGNMENT
-        std::cout << j << " ts1 " << ts1 << std::endl;
-        std::cout << k << " ts2 " << ts2 << std::endl;
-        std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
+  std::cout << j << " ts1 " << ts1 << std::endl;
+  std::cout << k << " ts2 " << ts2 << std::endl;
+  std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
 #endif 
         if(abs(ts1-ts2)<ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-          std::cout << "1" << std::endl;
+  std::cout << "1" << std::endl;
 #endif
-	  hh[i-id_csi]->Fill(ts1-ts2);
-	  k++;
-        }else if((ts1-ts2)>ALIGNMENTWINDOW){
+          hh[i-id_csi]->Fill(ts1-ts2);
+          k++;
+        }
+        else if((ts1-ts2)>ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-          std::cout << "2" << std::endl;
+  std::cout << "2" << std::endl;
 #endif
           k++;
-        }else{
+        }
+        else{
 #ifdef DEBUGALIGNMENT
-          std::cout << "3" << std::endl;
+  std::cout << "3" << std::endl;
 #endif
           j++;
           break;
@@ -287,7 +293,7 @@ void Alignment::GetCloverTimeInterval()
       if(ti > ti_max){
         ti_max = ti;
         k = j;
- 	ts = v[j];
+        ts = v[j];
       }
     }
     std::cout << i << " " << k << " " << ti_max << " " << ts << std::endl;
@@ -326,7 +332,7 @@ void Alignment::GetCsITimeInterval()
       if(ti > ti_max){
         ti_max = ti;
         k = j;
-	ts = v[j];
+        ts = v[j];
       }
     }
     std::cout << i << " " << k << " " << ti_max << " " << ts << std::endl;
