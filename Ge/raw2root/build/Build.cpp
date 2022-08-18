@@ -17,30 +17,30 @@ Build::Build(const std::string &filename_in1, const std::string &filename_in2, c
   total_entry = 0;
   for(int i=0;i<CLOVERNUMBER;i++){
     tr_clover[i] = (TTree*)file_in2->Get(TString::Format("tr_Clover%02d_cali_addback",i).Data());
-	if(tr_clover[i]){
+    if(tr_clover[i]){
       tr_clover[i]->SetBranchAddress("id_cali_addback", &id_clover);
       tr_clover[i]->SetBranchAddress("adc_cali_addback", &energy_clover);
       tr_clover[i]->SetBranchAddress("timestamp_cali_addback", &timestamp_clover);
 
-	  total_entry += tr_clover[i]->GetEntries();
+      total_entry += tr_clover[i]->GetEntries();
 #ifdef DEBUGBUILD
-	  std::cout << i << " entry " << tr_clover[i]->GetEntries() << std::endl;
+      std::cout << i << " entry " << tr_clover[i]->GetEntries() << std::endl;
 #endif
-	}
+    }
   }
 
   for(int i=0;i<CSINUMBER;i++){
     tr_csi[i] = (TTree*)file_in1->Get(TString::Format("tr_CsI_ch%02d",i).Data());
-	if(tr_csi[i]){
+    if(tr_csi[i]){
       tr_csi[i]->SetBranchAddress("ch", &id_csi);
       tr_csi[i]->SetBranchAddress("qdc", qdc_csi);
       tr_csi[i]->SetBranchAddress("timestamp", &timestamp_csi);
 
-	  total_entry += tr_csi[i]->GetEntries();
+      total_entry += tr_csi[i]->GetEntries();
 #ifdef DEBUGBUILD
-	  std::cout << i << " entry " << tr_csi[i]->GetEntries() << std::endl;
+      std::cout << i << " entry " << tr_csi[i]->GetEntries() << std::endl;
 #endif
-	}
+    }
   }
 
 #ifdef DEBUGBUILD
@@ -83,28 +83,28 @@ void Build::Sort()
   total_entry = 0;
   for(int i=0;i<CLOVERNUMBER;i++){
     if(!tr_clover[i]) continue;
-	nentries[i] = tr_clover[i]->GetEntries();
-	for(int j=0;j<tr_clover[i]->GetEntries();j++){
+    nentries[i] = tr_clover[i]->GetEntries();
+    for(int j=0;j<tr_clover[i]->GetEntries();j++){
 #ifdef DEBUGBUILD
-	  if(total_entry%10000000==0) std::cout << "clover " << total_entry << std::endl;
+      if(total_entry%10000000==0) std::cout << "clover " << total_entry << std::endl;
 #endif
-          tr_clover[i]->GetEntry(j);
-	  ts[total_entry] = timestamp_clover;
-	  total_entry++;
-	}
+      tr_clover[i]->GetEntry(j);
+      ts[total_entry] = timestamp_clover;
+      total_entry++;
+    }
   } 
 
   for(int i=0;i<CSINUMBER;i++){
     if(!tr_csi[i]) continue;
-	nentries[CLOVERNUMBER+i] = tr_csi[i]->GetEntries();
-	for(int j=0;j<tr_csi[i]->GetEntries();j++){
+    nentries[CLOVERNUMBER+i] = tr_csi[i]->GetEntries();
+    for(int j=0;j<tr_csi[i]->GetEntries();j++){
 #ifdef DEBUGBUILD
-	  if(total_entry%10000000==0) std::cout << "csi " << total_entry << std::endl;
+      if(total_entry%10000000==0) std::cout << "csi " << total_entry << std::endl;
 #endif
-	  tr_csi[i]->GetEntry(j);
-	  ts[total_entry] = timestamp_csi;
-	  total_entry++;
-	}
+      tr_csi[i]->GetEntry(j);
+      ts[total_entry] = timestamp_csi;
+      total_entry++;
+    }
   }
 
 #ifdef DEBUGBUILD
@@ -125,7 +125,7 @@ void Build::Sort()
   memset(max_tag, 0, sizeof(max_tag));
   for(int i=0;i<(CLOVERNUMBER+CSINUMBER);i++){
     for(int j=0;j<i;j++) min_tag[i] += nentries[j];
-	for(int j=0;j<=i;j++)  max_tag[i] += nentries[j];
+    for(int j=0;j<=i;j++) max_tag[i] += nentries[j];
   }
 
 #ifdef DEBUGBUILD
@@ -141,25 +141,24 @@ void Build::Sort()
   Long64_t i_previous, i_next;
 
   for(Long64_t i=0;i<total_entry;i++){
-  //for(int i=0;i<10;i++){
 #ifdef DEBUGBUILD
     std::cout << "ts " << ts[i] << " ts_id " << ts_id[i] << std::endl;
 #endif
-	if(total_entry%100000==0) std::cout << "entry " << total_entry << std::endl;
+    if(total_entry%100000==0) std::cout << "entry " << total_entry << std::endl;
     for(int j=0;j<(CLOVERNUMBER+CSINUMBER);j++){
-	  if(ts_id[i]>=min_tag[j] && ts_id[i]<max_tag[j]){
-	    tr_id = j;
-		tr_entry = ts_id[i]-min_tag[j];
-		break;
-	  }
-	}
+      if(ts_id[i]>=min_tag[j] && ts_id[i]<max_tag[j]){
+        tr_id = j;
+        tr_entry = ts_id[i]-min_tag[j];
+        break;
+      }
+    }
 #ifdef DEBUGBUILD
     std::cout << "tr_id " << tr_id << std::endl;
     std::cout << "tr_entry " << tr_entry << std::endl;
 #endif
 
     if(tr_id>(CLOVERNUMBER-1)){
-	  continue;
+      continue;
     }
 
     tr_clover[tr_id]->GetEntry(tr_entry);
@@ -174,84 +173,83 @@ void Build::Sort()
 
     //search foreward
     while(1){
-	  i_previous--;
-	  if(i_previous<0){
-	    break;
-	  }
+      i_previous--;
+      if(i_previous<0){
+        break;
+      }
       for(int j=0;j<(CLOVERNUMBER+CSINUMBER);j++){
-	    if(ts_id[i_previous]>=min_tag[j] && ts_id[i_previous]<max_tag[j]){
-	      tr_id = j;
-		  tr_entry = ts_id[i_previous]-min_tag[j];
-		  break;
-	    }
-	  }
+        if(ts_id[i_previous]>=min_tag[j] && ts_id[i_previous]<max_tag[j]){
+          tr_id = j;
+          tr_entry = ts_id[i_previous]-min_tag[j];
+          break;
+        }
+      }
     
-	  if(tr_id<CLOVERNUMBER){
-	    tr_clover[tr_id]->GetEntry(tr_entry);
-	    if(abs(timestamp_clover-timestamp_now)>COINWINDOWCLOVER) break;
+      if(tr_id<CLOVERNUMBER){
+        tr_clover[tr_id]->GetEntry(tr_entry);
+        if(abs(timestamp_clover-timestamp_now)>COINWINDOWCLOVER) break;
 
-	    clover_id[clover_hit] = id_clover;
+        clover_id[clover_hit] = id_clover;
         clover_energy[clover_hit] = energy_clover;
         clover_timestamp[clover_hit] = timestamp_clover;
-	    clover_hit++;
-	  }else{
+        clover_hit++;
+      }
+      else{
+        tr_csi[tr_id-CLOVERNUMBER]->GetEntry(tr_entry);
+        if(abs(timestamp_csi-timestamp_now)>COINWINDOWCSI){
+          break;
+        }
 
-	    tr_csi[tr_id-CLOVERNUMBER]->GetEntry(tr_entry);
-	    if(abs(timestamp_csi-timestamp_now)>COINWINDOWCSI){
-		  break;
-		}
-
-	    csi_id[csi_hit] = tr_id-CLOVERNUMBER;
-	    csi_qdc1[csi_hit] = qdc_csi[0];
-	    csi_qdc2[csi_hit] = qdc_csi[1];
-	    csi_qdc3[csi_hit] = qdc_csi[2];
-	    csi_qdc4[csi_hit] = qdc_csi[3];
-	    csi_timestamp[csi_hit] = timestamp_csi;
-	    csi_hit++;
-	  }
-
+        csi_id[csi_hit] = tr_id-CLOVERNUMBER;
+        csi_qdc1[csi_hit] = qdc_csi[0];
+        csi_qdc2[csi_hit] = qdc_csi[1];
+        csi_qdc3[csi_hit] = qdc_csi[2];
+        csi_qdc4[csi_hit] = qdc_csi[3];
+        csi_timestamp[csi_hit] = timestamp_csi;
+        csi_hit++;
+      }
     }
 
     //search backward
     while(1){
       i_next++;
-	  if(i_next>=(total_entry-1)){
-	    break;
-	  }
-	
+      if(i_next>=(total_entry-1)){
+        break;
+      }
+
       for(int j=0;j<(CLOVERNUMBER+CSINUMBER);j++){
-	    if(ts_id[i_next]>=min_tag[j] && ts_id[i_next]<max_tag[j]){
-	      tr_id = j;
-		  tr_entry = ts_id[i_next]-min_tag[j];
-		  break;
-	    }
-	  }
+        if(ts_id[i_next]>=min_tag[j] && ts_id[i_next]<max_tag[j]){
+          tr_id = j;
+          tr_entry = ts_id[i_next]-min_tag[j];
+          break;
+        }
+      }
 
-	  if(tr_id<CLOVERNUMBER){
-	    tr_clover[tr_id]->GetEntry(tr_entry);
-	    if(abs(timestamp_clover-timestamp_now)>COINWINDOWCLOVER) break;
+      if(tr_id<CLOVERNUMBER){
+        tr_clover[tr_id]->GetEntry(tr_entry);
+        if(abs(timestamp_clover-timestamp_now)>COINWINDOWCLOVER) break;
 
-	    clover_id[clover_hit] = id_clover;
+        clover_id[clover_hit] = id_clover;
         clover_energy[clover_hit] = energy_clover;
         clover_timestamp[clover_hit] = timestamp_clover;
-	    clover_hit++;
+        clover_hit++;
 
-		i = i_next+1;
-	  }else{
-
-	    tr_csi[tr_id-CLOVERNUMBER]->GetEntry(tr_entry);
-	    if(abs(timestamp_csi-timestamp_now)>COINWINDOWCSI){
+        i = i_next+1;
+      }
+      else{
+        tr_csi[tr_id-CLOVERNUMBER]->GetEntry(tr_entry);
+        if(abs(timestamp_csi-timestamp_now)>COINWINDOWCSI){
           break;
-	    }
+        }
 
-	    csi_id[csi_hit] = tr_id-CLOVERNUMBER;
-	    csi_qdc1[csi_hit] = qdc_csi[0];
-	    csi_qdc2[csi_hit] = qdc_csi[1];
-	    csi_qdc3[csi_hit] = qdc_csi[2];
-	    csi_qdc4[csi_hit] = qdc_csi[3];
-	    csi_timestamp[csi_hit] = timestamp_csi;
-	    csi_hit++;
-	  }
+        csi_id[csi_hit] = tr_id-CLOVERNUMBER;
+        csi_qdc1[csi_hit] = qdc_csi[0];
+        csi_qdc2[csi_hit] = qdc_csi[1];
+        csi_qdc3[csi_hit] = qdc_csi[2];
+        csi_qdc4[csi_hit] = qdc_csi[3];
+        csi_timestamp[csi_hit] = timestamp_csi;
+        csi_hit++;
+      }
     }
 
     tr_out->Fill();
