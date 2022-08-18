@@ -32,7 +32,7 @@ void paper_draw_qdc_pid()
   han_style->SetPadTickY(1);
   han_style->SetOptTitle(0);
   han_style->SetHistLineWidth(2);
-	
+
   printf("Welcome to ROOT!\n");
   gROOT->SetStyle("han_style");
   gStyle->SetLineWidth(2);

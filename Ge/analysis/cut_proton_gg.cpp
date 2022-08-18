@@ -6,13 +6,13 @@ void cut_proton_gg()
 {
   gROOT->SetBatch(1);
 
-	TFile *file_in = TFile::Open("../../../cut.root");
-	if(file_in->IsZombie()){
-		cout << "wrong open the file" << endl;
-		return;
-	}
+  TFile *file_in = TFile::Open("../../../cut.root");
+  if(file_in->IsZombie()){
+    cout << "wrong open the file" << endl;
+    return;
+  }
 
-	TTree *tr = (TTree*)file_in->Get("tr");
+  TTree *tr = (TTree*)file_in->Get("tr");
   TH1D *h_pgg = new TH1D("h_pgg", "", 2048, 0, 2048);
 
   tr->Draw("clover_cut_energy>>h_pgg", "proton_num>0 && clover_cut_hit>1");

@@ -17,9 +17,9 @@ void get_gamma_th1()
   file_out2.open("../../../gamma_gt2.txt");
 
   for(int i=0;i<2048;i++){
-  	file_out0 << i << "  " << h0->GetBinContent(i) << endl;
-  	file_out1 << i << "  " << h1->GetBinContent(i) << endl;
-  	file_out2 << i << "  " << h2->GetBinContent(i) << endl;
+    file_out0 << i << "  " << h0->GetBinContent(i) << endl;
+    file_out1 << i << "  " << h1->GetBinContent(i) << endl;
+    file_out2 << i << "  " << h2->GetBinContent(i) << endl;
   }
 
   file_out0.close();
