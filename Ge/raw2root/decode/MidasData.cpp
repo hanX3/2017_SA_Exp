@@ -82,7 +82,7 @@ bool MidasData::GetNextTwoWords()
       if((fread(&buff, sizeof(unsigned int), 2, fp)) != 2){
 #ifdef DEBUGMIDASDATA
         std::cout << "block header, then error" << "\n";
-	std::cout << "current position " << ftell(fp) << "\n";
+        std::cout << "current position " << ftell(fp) << "\n";
 #endif
         return false;
       }
@@ -91,7 +91,7 @@ bool MidasData::GetNextTwoWords()
       std::cout << hex << "buff[1] = " << buff[1] << "\n";
 #endif
     }
-	//read block tail
+    //read block tail
     else if(GetBuffFlag() == 2){
 #ifdef DEBUGMIDASDATA
       std::cout << "block tail" << "\n";
@@ -99,7 +99,7 @@ bool MidasData::GetNextTwoWords()
       if((fread(&buff, sizeof(unsigned int), 2, fp)) != 2){
 #ifdef DEBUGMIDASDATA
         std::cout << "block tail, then error" << "\n";
-	std::cout << "current position " << ftell(fp) << "\n";
+        std::cout << "current position " << ftell(fp) << "\n";
 #endif
         return false;
       }
@@ -108,23 +108,23 @@ bool MidasData::GetNextTwoWords()
       std::cout << hex << "buff[1] = " << buff[1] << "\n";
 #endif
     }
-	//read 0x8340
+    //read 0x8340
     else{
 #ifdef DEBUGMIDASDATA
-      std::cout << "like 0x8340" << "\n";
+          std::cout << "like 0x8340" << "\n";
 #endif
-      if((fread(&buff, sizeof(unsigned int), 2, fp)) != 2){
+          if((fread(&buff, sizeof(unsigned int), 2, fp)) != 2){
 #ifdef DEBUGMIDASDATA
-        std::cout << "like 0x8340, then error " << "\n";
-		std::cout << "current position " << ftell(fp) << "\n";
+            std::cout << "like 0x8340, then error " << "\n";
+            std::cout << "current position " << ftell(fp) << "\n";
 #endif
-        return false;
-      }
+            return false;
+          }
 #ifdef DEBUGMIDASDATA
-      std::cout << hex << "buff[0] = " << buff[0] << "\n";
-      std::cout << hex << "buff[1] = " << buff[1] << "\n";
+          std::cout << hex << "buff[0] = " << buff[0] << "\n";
+          std::cout << hex << "buff[1] = " << buff[1] << "\n";
 #endif
-    }
+        }
   }
   return true;
 }
