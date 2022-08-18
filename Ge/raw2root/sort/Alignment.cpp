@@ -134,26 +134,26 @@ void Alignment::Process()
         if(k==(Long64_t)v2.size())  break;
         ts2 = v2[k];
 #ifdef DEBUGALIGNMENT
-  std::cout << j << " ts1 " << ts1 << std::endl;
-  std::cout << k << " ts2 " << ts2 << std::endl;
-  std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
+        std::cout << j << " ts1 " << ts1 << std::endl;
+        std::cout << k << " ts2 " << ts2 << std::endl;
+        std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
 #endif
         if(abs(ts1-ts2)<ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-  std::cout << "1" << std::endl;
+          std::cout << "1" << std::endl;
 #endif
           h1[i-id_clover-1]->Fill(ts1-ts2);
           k++;
         }
         else if((ts1-ts2)>ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-  std::cout << "2" << std::endl;
+          std::cout << "2" << std::endl;
 #endif
           k++;
         }
         else{
 #ifdef DEBUGALIGNMENT
-    std::cout << "3" << std::endl;
+          std::cout << "3" << std::endl;
 #endif
           j++;
           break;
@@ -179,26 +179,26 @@ void Alignment::Process()
         if(k==(Long64_t)v2.size())  break;
         ts2 = v2[k];
 #ifdef DEBUGALIGNMENT
-  std::cout << j << " ts1 " << ts1 << std::endl;
-  std::cout << k << " ts2 " << ts2 << std::endl;
-  std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
+        std::cout << j << " ts1 " << ts1 << std::endl;
+        std::cout << k << " ts2 " << ts2 << std::endl;
+        std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
 #endif
         if(abs(ts1-ts2)<ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-  std::cout << "1" << std::endl;
+          std::cout << "1" << std::endl;
 #endif
           h2[i-id_csi-1]->Fill(ts1-ts2);
           k++;
         }
         else if((ts1-ts2)>ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-  std::cout << "2" << std::endl;
+          std::cout << "2" << std::endl;
 #endif
           k++;
         }
         else{
 #ifdef DEBUGALIGNMENT
-  std::cout << "3" << std::endl;
+          std::cout << "3" << std::endl;
 #endif
           j++;
           break;
@@ -224,26 +224,26 @@ void Alignment::Process()
         if(k==(Long64_t)v2.size())  break;
         ts2 = v2[k];
 #ifdef DEBUGALIGNMENT
-  std::cout << j << " ts1 " << ts1 << std::endl;
-  std::cout << k << " ts2 " << ts2 << std::endl;
-  std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
+        std::cout << j << " ts1 " << ts1 << std::endl;
+        std::cout << k << " ts2 " << ts2 << std::endl;
+        std::cout << "ts1-ts2 " << ts1-ts2 << std::endl;
 #endif 
         if(abs(ts1-ts2)<ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-  std::cout << "1" << std::endl;
+          std::cout << "1" << std::endl;
 #endif
           hh[i-id_csi]->Fill(ts1-ts2);
           k++;
         }
         else if((ts1-ts2)>ALIGNMENTWINDOW){
 #ifdef DEBUGALIGNMENT
-  std::cout << "2" << std::endl;
+          std::cout << "2" << std::endl;
 #endif
           k++;
         }
         else{
 #ifdef DEBUGALIGNMENT
-  std::cout << "3" << std::endl;
+          std::cout << "3" << std::endl;
 #endif
           j++;
           break;
