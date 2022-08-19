@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
   WaveAnalysis *wa = new WaveAnalysis(file_in.Data(), file_out.Data(), 0, 0);
   
   wa->DrawEntry((Long64_t)entry);
-  wa->ProcessEntry((Long64_t)entry);  
+  wa->ProcessEntry((Long64_t)entry);
+  // wa->DrawMultiRCCR2();
 
   ac.Run();
 

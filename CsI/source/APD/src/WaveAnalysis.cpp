@@ -116,10 +116,10 @@ void WaveAnalysis::Process()
   benchmark->Start("analysis");
 
   for(Long64_t i=entry_start;i<entry_stop;i++){
-	if(i==total_entry) break;
+  if(i==total_entry) break;
     if(i%10000==0){
-	  std::cout << i << "/" << total_entry << std::endl;
-	}
+    std::cout << i << "/" << total_entry << std::endl;
+  }
 
     ProcessEntry(i);
     tr_out->Fill();
@@ -182,10 +182,10 @@ bool WaveAnalysis::ProcessEntry(Long64_t n)
 
     if(hit_num==0)
       cfd_par.threshold = cfd_par.threshold-1;
-    else if(hit_num>PILEUPMAX)
+    else if(hit_num>PILEUPMAX){
       cfd_par.threshold = cfd_par.threshold+1;
-    else if(hit_num>0 && hit_num<=PILEUPMAX)
-      break;
+    }
+    else if(hit_num>0 && hit_num<=PILEUPMAX) break;
 
     jj++;
     if(jj>0xffff || cfd_par.threshold<=0x0000 || cfd_par.threshold>=0xffff){
@@ -224,7 +224,8 @@ bool WaveAnalysis::ProcessEntry(Long64_t n)
         e_sum += data_trapz[j];
       }
       trapz_result.energy[i] = (e_sum>0 ? e_sum/trapz_par.peak_mean*4.0 : 0);
-    }else{
+    }
+    else{
       for(UInt_t j=e_start;j<ltra;j++){
         e_sum += data_trapz[j];
       }
@@ -288,19 +289,23 @@ void WaveAnalysis::Trapezoid(Long64_t n)
       d[i]=data_bl[i];
       q[i]=d[i];
       ss[i]=q[i]+M*d[i];
-    }else if(i>0 && i<k){
+    }
+    else if(i>0 && i<k){
       d[i]=data_bl[i];
       q[i]=q[i-1]+d[i];
       ss[i]=ss[i-1]+q[i]+M*d[i];
-    }else if(i>=k && i<l){
+    }
+    else if(i>=k && i<l){
       d[i]=data_bl[i]-data_bl[i-k];
       q[i]=q[i-1]+d[i];
       ss[i]=ss[i-1]+q[i]+M*d[i];
-    }else if(i>=l && i<l+k){
+    }
+    else if(i>=l && i<l+k){
       d[i]=data_bl[i]-data_bl[i-k]-data_bl[i-l];
       q[i]=q[i-1]+d[i];
       ss[i]=ss[i-1]+q[i]+M*d[i];
-    }else if(i>=l+k){
+    }
+    else if(i>=l+k){
       d[i]=data_bl[i]-data_bl[i-k]-data_bl[i-l]+data_bl[i-k-l];
       q[i]=q[i-1]+d[i];
       ss[i]=ss[i-1]+q[i]+M*d[i];
@@ -419,7 +424,7 @@ void WaveAnalysis::DrawMultiRCCR2()
     g[i] = new TGraph(ltra);
     for(int j=0;j<ltra;j++)
       g[i]->SetPoint(j, (Double_t)j, (Double_t)data_rccr2[j]);
-    mg->Add(g[i]);
+      mg->Add(g[i]);
   }
 
   cav1->cd();
@@ -479,7 +484,7 @@ Double_t Fittf(Double_t *i, Double_t *p)
   else{
     s += p[5]*(1-exp(-x/p[3]))*e; 
     s += p[6]*(1-exp(-x/p[4]))*e;
-	return s;
+    return s;
   }
 }
 
