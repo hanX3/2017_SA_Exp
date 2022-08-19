@@ -302,7 +302,7 @@ void Alignment::GetCloverTimeInterval()
   file_out->cd();
   for(int i=id_clover;i<CLOVERCHANNELS;i++){
     if(!tr_Clover[i]) continue;
-      hi_clover[i-id_clover]->Write();
+    hi_clover[i-id_clover]->Write();
   }
 }
 

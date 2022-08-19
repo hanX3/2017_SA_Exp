@@ -45,9 +45,9 @@ void Sort::AddBack(Int_t c)
     tr[i] = (TTree*)file_in->Get(TString::Format("tr_Clover_ch%02d",4*c+i).Data());
     if(!tr[i]){
 #ifdef DEBUGSORT
-    std::cout << "clover " << c << " empty tree" << std::endl;
+      std::cout << "clover " << c << " empty tree" << std::endl;
 #endif
-    return;
+      return;
     }
 
     total_entry += tr[i]->GetEntries();
@@ -136,7 +136,7 @@ void Sort::AddBack(Int_t c)
     adc_cali = vec_cd[i].energy;
     timestamp_cali = vec_cd[i].timestamp;
 
-  tr_Clover_cali->Fill();
+    tr_Clover_cali->Fill();
   }
   file_out->cd();
   tr_Clover_cali->Write();
@@ -240,7 +240,7 @@ void GetCloverCali(Double_t p[CLOVERCHANNELS][3])
   f.open(TString::Format("%s",CLOVERCALIDATA).Data());
   if(!f){
     std::cout << "can not open " << CLOVERCALIDATA << std::endl;
-  return;
+    return;
   }
 
   Int_t id;
