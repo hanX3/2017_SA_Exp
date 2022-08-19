@@ -61,9 +61,7 @@ Cut::Cut(const std::string &filename_in, const std::string &filename_out)
     std::ifstream fi;
     //fi.open(TString::Format("./dat/csi%02d_alpha.txt",i).Data());
     fi.open(TString::Format("./dat/csi%02d_alpha_stringent.txt",i).Data());
-    if(!fi){
-      continue;
-    }
+    if(!fi) continue;
 
     fi >> ax_alpha[i] >> ay_alpha[i];
     fi >> bx_alpha[i] >> by_alpha[i];
@@ -173,9 +171,11 @@ bool Cut::IsInsideProton(Int_t id, Double_t x, Double_t y)
 
   if(papb>=0 && pbpc>=0 && pcpd>=0 && pdpa>=0){
     return 1;
-  }else if(papb<=0 && pbpc<=0 && pcpd<=0 && pdpa<=0){
+  }
+  else if(papb<=0 && pbpc<=0 && pcpd<=0 && pdpa<=0){
     return 1;
-  }else{
+  }
+  else{
     return 0;
   }
 }
@@ -225,9 +225,11 @@ bool Cut::IsInsideAlpha(Int_t id, Double_t x, Double_t y)
 
   if(papb>=0 && pbpc>=0 && pcpd>=0 && pdpa>=0){
     return 1;
-  }else if(papb<=0 && pbpc<=0 && pcpd<=0 && pdpa<=0){
+  }
+  else if(papb<=0 && pbpc<=0 && pcpd<=0 && pdpa<=0){
     return 1;
-  }else{
+  }
+  else{
     return 0;
   }
 }
@@ -259,11 +261,12 @@ void Cut::ProcessEntry(Long64_t n)
     yy = csi_qdc2[i]-2./3.*csi_qdc1[i];
     if(IsInsideProton(csi_id[i], xx, yy)){
       csi_cut_type[i] = 1;
-	  proton_num++;
-    }else if(IsInsideAlpha(csi_id[i], xx, yy)){
-	  csi_cut_type[i] = 2;
-	  alpha_num++;
-	}
+      proton_num++;
+    }
+    else if(IsInsideAlpha(csi_id[i], xx, yy)){
+      csi_cut_type[i] = 2;
+      alpha_num++;
+    }
   }
 
   Int_t kk = 0;
