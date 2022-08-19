@@ -124,7 +124,7 @@ bool MidasData::GetNextTwoWords()
           std::cout << hex << "buff[0] = " << buff[0] << "\n";
           std::cout << hex << "buff[1] = " << buff[1] << "\n";
 #endif
-        }
+    }
   }
   return true;
 }
