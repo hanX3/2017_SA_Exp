@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
   if(argc != 4){
     std::cout << "need parameter" << std::endl;
     std::cout << "like: ana 39 0 1000" << std::endl;
-	std::cout << "means analysi file 39 entry 0 to 1000 " << std::endl;
-	return -1;
+    std::cout << "means analysi file 39 entry 0 to 1000 " << std::endl;
+    return -1;
   }
 
   int run = atoi(argv[1]);
