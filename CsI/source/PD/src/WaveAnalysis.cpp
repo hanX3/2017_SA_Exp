@@ -116,7 +116,7 @@ void WaveAnalysis::Process()
   for(Long64_t i=entry_start;i<entry_stop;i++){
     if(i==total_entry) break;
     if(i%10000==0){
-    std::cout << i << "/" << total_entry << std::endl;
+      std::cout << i << "/" << total_entry << std::endl;
     }
 
     ProcessEntry(i);
