@@ -19,7 +19,7 @@ Double_t PreAmp(Double_t *i, Double_t *p);
 //
 void pileup(Long64_t n)
 {
-  TFile *fi1 = TFile::Open("../../../../../data/CsI/source/run_R0040/run_R0040_000000000_000001000_ana.root");
+  TFile *fi1 = TFile::Open("../../../../../data/CsI/source/run_R0040/run_R0040_ana_all.root");
   if(fi1->IsZombie()){
     cout << "wrong open the file" << endl;
     return;
