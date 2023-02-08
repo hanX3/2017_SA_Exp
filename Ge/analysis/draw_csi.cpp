@@ -48,16 +48,17 @@ void draw_csi()
       xx = 2.*csi_qdc4[j]-2.*csi_qdc1[j];
       yy = csi_qdc2[j]-2./3.*csi_qdc1[j];
 
-      h[csi_id[j]]->Fill(xx, yy);
+      // h[csi_id[j]]->Fill(xx, yy);
+      h[csi_id[j]]->Fill(yy, xx);
     }
   }
   
-  TFile *ff = new TFile("draw_th1.root", "update");
+  TFile *ff = new TFile("draw_th1_230129.root", "update");
   ff->cd();
   for(int i=0;i<CSINUMBER;i++){
     //cout << i << " " << h[i]->GetSum() << endl;
     if(h[i]->GetSum()==0) continue;
-    h[i]->write();
+    h[i]->Write();
   }
 
   ff->Close();
