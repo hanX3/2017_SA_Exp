@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
   if(argc != 3){
     std::cout << "need parameter" << std::endl;
     std::cout << "like: ana 0 1000" << std::endl;
-	std::cout << "means analysi file entry 0 to 1000 " << std::endl;
-	return -1;
+    std::cout << "means analysi file entry 0 to 1000 " << std::endl;
+    return -1;
   }
 
   TString file_in = TString::Format("../../../../../data/CsI/inbeam/mod2-DDAS-2017-12-08-14-44-59/data_ch00_300lsb.root");

@@ -13,8 +13,8 @@ void paper_draw_source_apd_qdc_pid()
   TTree *tr = (TTree*)file_in->Get("tr");
   
   //
-  TH2D *h = new TH2D("h", "", 800,0,800,500,0,500);
-  tr->Draw("qdc_short:qdc_long>>h","","col");
+  TH2D *h = new TH2D("h", "", 500,0,500,800,0,800);
+  tr->Draw("qdc_long:qdc_short>>h","","col");
  
   TCanvas *cav = new TCanvas("cav", "", 0, 0, 520, 360);
   cav->SetLogz();
@@ -26,19 +26,19 @@ void paper_draw_source_apd_qdc_pid()
   h->GetXaxis()->SetTitleOffset(1.2);
   h->GetYaxis()->SetTitleOffset(1.2);
 
-  h->GetXaxis()->SetTitle("Slow Component");
+  h->GetXaxis()->SetTitle("Short Gate");
   h->GetXaxis()->SetTitleSize(0.06);
-  h->GetYaxis()->SetTitle("Fast Component");
+  h->GetYaxis()->SetTitle("Long Gate");
   h->GetYaxis()->SetTitleSize(0.06);
-  h->GetXaxis()->SetRangeUser(0, 800);
-  h->GetYaxis()->SetRangeUser(0, 500);
+  h->GetXaxis()->SetRangeUser(0, 500);
+  h->GetYaxis()->SetRangeUser(0, 800);
   h->GetXaxis()->CenterTitle();
   h->GetYaxis()->CenterTitle();
 
   h->Draw("col");
 
-  TLatex *tex_g = new TLatex(403,250,"#gamma #rightarrow CsI");
-  TLatex *tex_a = new TLatex(538,330,"#alpha #rightarrow CsI");
+  TLatex *tex_g = new TLatex(156,429,"#gamma #rightarrow CsI");
+  TLatex *tex_a = new TLatex(357,432,"#alpha #rightarrow CsI");
 
   tex_a->SetTextSize(0.06);
   tex_g->SetTextSize(0.06);
@@ -46,7 +46,7 @@ void paper_draw_source_apd_qdc_pid()
   tex_g->Draw();
   tex_a->Draw();
 
-  TLatex *tex = new TLatex(80,415,"(c)");
+  TLatex *tex = new TLatex(36,679,"(c)");
   tex->SetTextSize(0.06);
   tex->Draw();
  

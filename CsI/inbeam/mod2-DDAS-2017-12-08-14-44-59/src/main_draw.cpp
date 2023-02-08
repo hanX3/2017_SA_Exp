@@ -16,8 +16,8 @@ int main(int argc, char *argv[])
   if(argc != 2){
     std::cout << "need parameter" << std::endl;
     std::cout << "like: ana 0" << std::endl;
-	std::cout << "means analysi entry 0 " << std::endl;
-	return -1;
+    std::cout << "means analysi entry 0 " << std::endl;
+    return -1;
   }
 
   TApplication ac("app", &argc, argv);
