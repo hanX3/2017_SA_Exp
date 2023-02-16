@@ -14,7 +14,8 @@ void paper_draw_source_apd_qdc_pid()
   
   //
   TH2D *h = new TH2D("h", "", 500,0,500,800,0,800);
-  tr->Draw("qdc_long:qdc_short>>h","","col");
+  // tr->Draw("qdc_long:qdc_short>>h","","col");
+  tr->Draw("qdc_long:qdc_short>>h","","col",200000);
  
   TCanvas *cav = new TCanvas("cav", "", 0, 0, 520, 360);
   cav->SetLogz();
@@ -35,6 +36,7 @@ void paper_draw_source_apd_qdc_pid()
   h->GetXaxis()->CenterTitle();
   h->GetYaxis()->CenterTitle();
 
+  h->SetMinimum(2);
   h->Draw("col");
 
   TLatex *tex_g = new TLatex(156,429,"#gamma #rightarrow CsI");

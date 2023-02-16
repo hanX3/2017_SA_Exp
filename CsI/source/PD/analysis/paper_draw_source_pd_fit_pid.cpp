@@ -20,7 +20,8 @@ void paper_draw_source_pd_fit_pid()
 
   //
   TH2D *h = new TH2D("h", "", 900,0,300,600,0,200);
-  tr->Draw(str_draw.Data(),"am_fast>0.","col");
+  // tr->Draw(str_draw.Data(),"am_fast>0.","col");
+  tr->Draw(str_draw.Data(),"am_fast>0.","col",200000);
  
   TCanvas *cav = new TCanvas("cav", "", 0, 0, 520, 360);
   cav->SetLogz();
@@ -41,6 +42,7 @@ void paper_draw_source_pd_fit_pid()
   h->GetXaxis()->CenterTitle();
   h->GetYaxis()->CenterTitle();
 
+  h->SetMinimum(2);
   h->Draw("col");
 
   TLatex *tex_p = new TLatex(28, 82, "#gamma #rightarrow CsI");
