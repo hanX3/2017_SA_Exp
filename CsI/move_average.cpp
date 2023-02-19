@@ -6,9 +6,9 @@ Double_t N = 10.;
 void move_average()
 {
   ifstream fi;
-  fi.open("wave_1.dat");
+  fi.open("wave_11.dat");
   if(!fi){
-    cout << "can not open wave_1.dat" << endl;
+    cout << "can not open wave.dat" << endl;
     return;
   }
 
@@ -45,9 +45,10 @@ void move_average()
 
 
   ofstream fo;
-  fo.open("wave_1_ma.dat");
+  fo.open("wave_11_ma.dat");
   for(int i=0;i<v_a.size();i++){
-    fo << v_a[i] << " " << v_b_ma[i]/v_b_ma[v_a.size()-1] << endl;
+    fo << v_a[i] << " " << v_b_ma[i] << endl;
+    // fo << v_a[i] << " " << v_b_ma[i]/v_b_ma[v_a.size()-1] << endl;
   }
 
   fi.close();

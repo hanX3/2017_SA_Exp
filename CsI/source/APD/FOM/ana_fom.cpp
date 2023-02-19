@@ -19,8 +19,8 @@ void rotate_qdc(int q1_stop, double theta)
   str_draw = TString::Format("qdc_short*%f+qdc_long*%f:qdc_short*%f-qdc_long*%f>>hh1", sinn, coss, coss, sinn);
 
   cc1->cd();
-  // tr->Draw(str_draw.Data(), "(qdc_long>180&&qdc_long<280) || (qdc_long>400&&qdc_long<600)", "col");
-  tr->Draw(str_draw.Data(), "", "col");
+  tr->Draw(str_draw.Data(), "(qdc_long>180&&qdc_long<280) || (qdc_long>400&&qdc_long<600)", "col");
+  // tr->Draw(str_draw.Data(), "", "col");
 
   TH1D *hy1 = hh1->ProjectionY("hy1");
   cc2->cd();

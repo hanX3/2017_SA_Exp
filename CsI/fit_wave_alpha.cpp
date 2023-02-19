@@ -7,7 +7,7 @@ void fit_wave_alpha()
   TGraph *gr = new TGraph(2999);
 
   ifstream fi;
-  fi.open("wave_8.dat");
+  fi.open("wave_11.dat");
   if(!fi){
     cout << "can not open the file" << endl;
     return;
