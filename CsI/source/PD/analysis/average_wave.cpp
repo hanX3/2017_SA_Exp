@@ -25,6 +25,7 @@ void average_wave()
     if(!fi.good()){
       break;
     }
+    if(j==50) break;
 
     ifstream fii;
     fii.open(TString::Format("../../../../../data/CsI/source/paper_draw/pd_wave_id%06d.txt",id).Data());

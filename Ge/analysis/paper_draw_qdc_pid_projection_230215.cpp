@@ -39,7 +39,7 @@ void paper_draw_qdc_pid_projection_230215()
 
   gStyle->SetOptLogz();
   gStyle->SetTextSize(0.1);
-  gStyle->SetTextFont(22);
+  // gStyle->SetTextFont(22);
 
   //gROOT->SetBatch(1);
 
@@ -57,7 +57,7 @@ void paper_draw_qdc_pid_projection_230215()
   tr->SetBranchAddress("yy", &yy);
 
   TH2D *h = new TH2D("h", "h", 1000, 0, 500, 400, 0, 40);
-  tr->Draw("xx/(yy-180):xx/36.>>h", "yy>180", "colz");
+  tr->Draw("xx/(yy-180):xx/36.>>h", "yy>180&&(xx/(yy+20.)>3.)&&(xx/(yy+100)<20.)", "colz");
 
   TCanvas *cav = new TCanvas("cav", "", 0, 0, 520, 360);
   cav->cd();

@@ -39,7 +39,7 @@ void paper_draw_qdc_pid_230215()
 
   gStyle->SetOptLogz();
   gStyle->SetTextSize(0.1);
-  gStyle->SetTextFont(22);
+  // gStyle->SetTextFont(22);
 
   //gROOT->SetBatch(1);
 
