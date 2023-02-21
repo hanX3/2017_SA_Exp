@@ -88,8 +88,8 @@ void paper_draw_source_pd_fit_pid()
   h->SetMinimum(2);
   h->Draw("col");
 
-  TLatex *tex_p = new TLatex(50, 90, "#gamma #rightarrow CsI");
-  TLatex *tex_a = new TLatex(80, 60, "#alpha #rightarrow CsI");
+  TLatex *tex_p = new TLatex(52, 90, "#gamma #rightarrow CsI");
+  TLatex *tex_a = new TLatex(85, 60, "#alpha #rightarrow CsI");
   TLatex *tex_g = new TLatex(90, 40, "#gamma #rightarrow PD");
 
   tex_p->SetTextSize(0.08);

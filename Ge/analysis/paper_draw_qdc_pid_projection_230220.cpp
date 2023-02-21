@@ -71,7 +71,7 @@ void paper_draw_qdc_pid_projection_230220()
   h->GetYaxis()->SetTitle("Long Gate");
   h->GetYaxis()->SetTitleSize(0.06);
   h->GetYaxis()->SetRangeUser(10, 500);
-  h->GetXaxis()->SetRangeUser(2, 12);
+  h->GetXaxis()->SetRangeUser(3, 12);
   h->GetXaxis()->CenterTitle();
   h->GetYaxis()->CenterTitle();
 
