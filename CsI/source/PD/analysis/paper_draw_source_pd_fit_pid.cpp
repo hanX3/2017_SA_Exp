@@ -76,9 +76,9 @@ void paper_draw_source_pd_fit_pid()
   h->GetXaxis()->SetLabelSize(0.06);
   h->GetYaxis()->SetLabelSize(0.06);
 
-  h->GetXaxis()->SetTitle("Fast Amplitude");
+  h->GetXaxis()->SetTitle("Fast Amplitude [a.u.]");
   h->GetXaxis()->SetTitleSize(0.06);
-  h->GetYaxis()->SetTitle("Slow Amplitude");
+  h->GetYaxis()->SetTitle("Slow Amplitude [a.u.]");
   h->GetYaxis()->SetTitleSize(0.06);
   h->GetXaxis()->SetRangeUser(0, 140);
   h->GetYaxis()->SetRangeUser(0, 120);

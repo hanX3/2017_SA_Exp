@@ -70,9 +70,9 @@ void paper_draw_source_pd_qdc_pid()
   h->GetXaxis()->SetLabelSize(0.06);
   h->GetYaxis()->SetLabelSize(0.06);
 
-  h->GetXaxis()->SetTitle("Short Gate");
+  h->GetXaxis()->SetTitle("Short Gate [a.u.]");
   h->GetXaxis()->SetTitleSize(0.06);
-  h->GetYaxis()->SetTitle("Long Gate");
+  h->GetYaxis()->SetTitle("Long Gate [a.u.]");
   h->GetYaxis()->SetTitleSize(0.06);
   h->GetXaxis()->SetRangeUser(0, 30);
   h->GetYaxis()->SetRangeUser(0, 80);
