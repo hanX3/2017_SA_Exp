@@ -77,9 +77,9 @@ void paper_draw_qdc_pid_projection_230221()
 
   h->Draw("col");
 
-  TLatex *tex_p = new TLatex(9.5,400,"p");
-  TLatex *tex_a = new TLatex(6.2,390,"#alpha");
-  TLatex *tex_g = new TLatex(3.6,180,"#gamma + PD");
+  TLatex *tex_p = new TLatex(9.5/3.5,400,"p");
+  TLatex *tex_a = new TLatex(6.2/3.5,390,"#alpha");
+  TLatex *tex_g = new TLatex(3.6/3.5,180,"#gamma + PD");
   TLatex *tex_label = new TLatex(4.,400,"(b)");
 
   tex_p->Draw();

@@ -1,5 +1,5 @@
 
-void paper_draw_qdc_pid()
+void paper_draw_qdc_pid_230220()
 {
   TStyle *han_style= new TStyle("han_style","");
 
@@ -39,39 +39,55 @@ void paper_draw_qdc_pid()
 
   gStyle->SetOptLogz();
   gStyle->SetTextSize(0.1);
-  gStyle->SetTextFont(22);
+  // gStyle->SetTextFont(22);
 
   //gROOT->SetBatch(1);
 
   // real code
   TFile *file_in = TFile::Open("../../../draw_th1.root");
   if(file_in->IsZombie()){
-    cout << "wrong open the file" << endl;\
+    cout << "wrong open the file" << endl;
     return;
   }
 
   TH2D *h = (TH2D*)file_in->Get("h_csi_ch16");
+  TH2D *hh = new TH2D("hh", "", 20000, 0, 6000, 6000, 0, 600);
+
+  double k = 0;
+  for(int i=0;i<20000;i++){
+    for(int j=0;j<4000;j++){
+      k = h->GetBinContent(i, j);
+      hh->SetBinContent(j, i, k);
+    }
+  }
+
   TCanvas *cav = new TCanvas("cav", "", 0, 0, 520, 360);
   cav->cd();
 
-  h->GetXaxis()->SetTitle("Long QDC");
-  h->GetXaxis()->SetTitleSize(0.06);
-  h->GetYaxis()->SetTitle("Short QDC");
-  h->GetYaxis()->SetTitleSize(0.06);
-  h->GetXaxis()->SetRangeUser(100, 20000);
-  h->GetYaxis()->SetRangeUser(100, 3000);
-  h->GetXaxis()->CenterTitle();
-  h->GetYaxis()->CenterTitle();
+  hh->GetXaxis()->SetLabelSize(0.06);
+  hh->GetYaxis()->SetLabelSize(0.06);
 
-  h->Draw("col");
+  hh->SetMinimum(2);
+  hh->GetXaxis()->SetTitle("Short Gate");
+  hh->GetXaxis()->SetTitleSize(0.06);
+  hh->GetYaxis()->SetTitle("Long Gate");
+  hh->GetYaxis()->SetTitleSize(0.06);
+  hh->GetXaxis()->SetRangeUser(0, 200);
+  hh->GetYaxis()->SetRangeUser(0, 500);
+  hh->GetXaxis()->CenterTitle();
+  hh->GetYaxis()->CenterTitle();
 
-  TLatex *tex_p = new TLatex(16000,2000,"p");
-  TLatex *tex_a = new TLatex(13000,2400,"#alpha");
-  TLatex *tex_g = new TLatex(3000,1600,"#gamma + PD");
+  hh->Draw("col");
+
+  TLatex *tex_p = new TLatex(145,420,"p");
+  TLatex *tex_a = new TLatex(170,320,"#alpha");
+  TLatex *tex_g = new TLatex(120,100,"#gamma + PD");
+  TLatex *tex_label = new TLatex(20,400,"(a)");
 
   tex_p->Draw();
   tex_a->Draw();
   tex_g->Draw();
+  tex_label->Draw();
 
   cav->SaveAs("qdc_pid.pdf");
 
