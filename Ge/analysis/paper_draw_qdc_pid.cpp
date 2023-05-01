@@ -1,5 +1,5 @@
 
-void paper_draw_qdc_pid_230220()
+void paper_draw_qdc_pid()
 {
   TStyle *han_style= new TStyle("han_style","");
 
