@@ -70,9 +70,9 @@ void paper_draw_source_apd_qdc_pid()
   h->GetXaxis()->SetLabelSize(0.06);
   h->GetYaxis()->SetLabelSize(0.06);
 
-  h->GetXaxis()->SetTitle("Short Gate");
+  h->GetXaxis()->SetTitle("Short Gate [a.u.]");
   h->GetXaxis()->SetTitleSize(0.06);
-  h->GetYaxis()->SetTitle("Long Gate");
+  h->GetYaxis()->SetTitle("Long Gate [a.u.]");
   h->GetYaxis()->SetTitleSize(0.06);
   h->GetXaxis()->SetRangeUser(0, 500);
   h->GetYaxis()->SetRangeUser(0, 800);
@@ -92,7 +92,7 @@ void paper_draw_source_apd_qdc_pid()
   tex_g->Draw();
   tex_a->Draw();
 
-  TLatex *tex = new TLatex(36,679,"(c)");
+  TLatex *tex = new TLatex(36,679,"(b)");
   tex->SetTextSize(0.08);
   tex->Draw();
  
