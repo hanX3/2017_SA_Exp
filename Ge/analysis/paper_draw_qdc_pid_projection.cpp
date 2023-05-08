@@ -56,8 +56,8 @@ void paper_draw_qdc_pid_projection()
   tr->SetBranchAddress("xx", &xx);
   tr->SetBranchAddress("yy", &yy);
 
-  TH2D *h = new TH2D("h", "h", 800, 0, 10, 1000, 0, 500);
-  tr->Draw("xx/36.:xx/36/(yy/14.-16.75)>>h", "yy>180&&(xx/(yy+20.)>3.)&&(xx/(yy+100)<20.)", "colz");
+  TH2D *h = new TH2D("h", "h", 600, 0, 10, 1000, 0, 500);
+  tr->Draw("xx/36.:xx/36/(yy/14.-16.75)/1.6>>h", "yy>180&&(xx/(yy+20.)>3.)&&(xx/(yy+100)<20.)", "colz");
 
   TCanvas *cav = new TCanvas("cav", "", 0, 0, 520, 360);
   cav->cd();
@@ -68,19 +68,19 @@ void paper_draw_qdc_pid_projection()
   h->SetMinimum(2);
   h->GetXaxis()->SetTitle("PID");
   h->GetXaxis()->SetTitleSize(0.06);
-  h->GetYaxis()->SetTitle("Long Gate [a.u.]");
+  h->GetYaxis()->SetTitle("Q_{long} [a.u.]");
   h->GetYaxis()->SetTitleSize(0.06);
   h->GetYaxis()->SetRangeUser(10, 500);
-  h->GetXaxis()->SetRangeUser(1, 5);
+  h->GetXaxis()->SetRangeUser(0.5, 3.5);
   h->GetXaxis()->CenterTitle();
   h->GetYaxis()->CenterTitle();
 
   h->Draw("col");
 
-  TLatex *tex_p = new TLatex(3.7,400,"p");
-  TLatex *tex_a = new TLatex(2.5,390,"#alpha");
-  TLatex *tex_g = new TLatex(1.2,180,"#gamma + PD");
-  TLatex *tex_label = new TLatex(1.5,400,"(b)");
+  TLatex *tex_p = new TLatex(2.3,400,"p");
+  TLatex *tex_a = new TLatex(1.4,390,"#alpha");
+  TLatex *tex_g = new TLatex(0.6,180,"#gamma + PD");
+  TLatex *tex_label = new TLatex(1.0,400,"(b)");
 
   tex_p->Draw();
   tex_a->Draw();
